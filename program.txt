@@ -1,0 +1,37 @@
+CLASSES {
+  // se crea la tabla House
+  House {
+    int size;
+    int rooms;
+    bool for_sale;
+    string address;
+  }
+  // se crea la tabla Person
+  Person {
+    string name;
+    int age;
+    bool married;
+  }
+
+}
+
+int a = 28;
+string julian = "julian";
+
+Person aPerson = new Person("Benja", 23, false);
+
+Person bPerson = new Person("Chule", 21, false);
+
+House aHouse = new House(40, 2, false, "Luis Maria Campos 1386");
+
+aPerson.name = "Fausto";
+bPerson.name = aPerson.name;
+
+if (aPerson.age >= 22) {
+  b = aPerson.age;
+}
+
+bPerson.age = HOUSE.max(size);
+
+// elimino la tupla aPerson de la tabla de personas
+aPerson.delete()

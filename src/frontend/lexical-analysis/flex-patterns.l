@@ -17,16 +17,16 @@
 %x COMMENT
 
 /* Patrones reutilizables. */
-digit			[0-9]
-endline			[\n]
+digit			    [0-9]
+endline			  [\n]
 whitespace		[ \f\n\r\t\v]
 
 %%
 
 "/*"										{ BEGIN(COMMENT); BeginCommentPatternAction(); }
-<COMMENT>.									{ ; }
-<COMMENT>{endline}							{ ; }
-<COMMENT>"*/"								{ EndCommentPatternAction(); BEGIN(INITIAL); }
+<COMMENT>.							{ ; }
+<COMMENT>{endline}			{ ; }
+<COMMENT>"*/"						{ EndCommentPatternAction(); BEGIN(INITIAL); }
 
 "+"											{ return AdditionOperatorPatternAction(yytext); }
 "-"											{ return SubtractionOperatorPatternAction(yytext); }
@@ -36,10 +36,10 @@ whitespace		[ \f\n\r\t\v]
 "("											{ return OpenParenthesisPatternAction(yytext); }
 ")"											{ return CloseParenthesisPatternAction(yytext); }
 
-{digit}+									{ return IntegerPatternAction(yytext, yyleng); }
+{digit}+								{ return IntegerPatternAction(yytext, yyleng); }
 
-{whitespace}								{ IgnoredPatternAction(yytext, yyleng); }
+{whitespace}						{ IgnoredPatternAction(yytext, yyleng); }
 
-.											{ return UnknownPatternAction(yytext, yyleng); }
+.											  { return UnknownPatternAction(yytext, yyleng); }
 
 %%
