@@ -12,8 +12,18 @@ CLASSES {
     int age;
     bool married;
   }
-
 }
+
+int MiNumero = 20;
+
+MiNumero = "Jose";
+
+int myFunction(int n1, int n2) {
+  b = n1 * 2;
+  return b * n2;
+}
+
+Person juampi = new Person(23, "Juampi", true);
 
 int a = 28;
 string julian = "julian";
@@ -27,11 +37,13 @@ House aHouse = new House(40, 2, false, "Luis Maria Campos 1386");
 aPerson.name = "Fausto";
 bPerson.name = aPerson.name;
 
-if (aPerson.age >= 22) {
+if (aPerson.age > 22) {
   b = aPerson.age;
+  pito = b;
+  Person cPerson = new Person("Juan", pito, true);
 }
 
-bPerson.age = HOUSE.max(size);
+bPerson.age = CLASSES.House.max(size);
 
 // elimino la tupla aPerson de la tabla de personas
 aPerson.delete()
