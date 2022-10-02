@@ -17,6 +17,26 @@
 
 	// No-terminales (frontend).
 	int program;
+	int classSection;
+	int classList;
+	int classDeclaration;
+	int className;
+	int attrList;
+	int attrDeclaration;
+	int dataType;
+	int attrName;
+
+	int codeSection;
+	int codeComponents;
+	int ifStatement;
+	int elseStatement;
+	int whileStatement;
+
+	int variableList;
+	int variableDefinition;
+
+	int condition;
+	int logicalExpression;
 	int expression;
 	int factor;
 	int constant;
@@ -24,6 +44,8 @@
 	// Terminales.
 	token token;
 	int integer;
+	char * string;
+	int bool;
 }
 
 // IDs y tipos de los tokens terminales generados desde Flex.
@@ -32,10 +54,38 @@
 %token <token> MUL
 %token <token> DIV
 
+%token <token> EQ
+
+%token <token> EQEQ
+%token <token> GT
+%token <token> LT
+
 %token <token> OPEN_PARENTHESIS
 %token <token> CLOSE_PARENTHESIS
 
+%token <token> OPEN_BRACKET
+%token <token> CLOSE_BRACKET
+%token <token> SEMI_COLON
+%token <token> DOT
+
+
+%token <token> CLASS_SECTION 
+%token <token> NEW
+%token <token> RETURN
+
 %token <integer> INTEGER
+%token <string> STRING
+%token <bool> BOOLEAN
+
+%token <token> CAPITALIZED_NAME
+%token <token> ALPHANUMERIC_NAME
+
+%token <token> IF
+%token <token> ELSE
+%token <token> WHILE
+
+%token <token> AND
+%token <token> OR
 
 // Tipos de dato para los no-terminales generados desde Bison.
 %type <program> program
@@ -50,10 +100,81 @@
 // El símbolo inicial de la gramatica.
 %start program
 
+
 %%
 
-program: expression													{ $$ = ProgramGrammarAction($1); }
+program: classSection codeSection									//{ $$ = ProgramGrammarAction($1); }
 	;
+
+classSection: CLASS_SECTION OPEN_BRACKET classList CLOSE_BRACKET	//									{ $$ = ClassDefinitionsPatternAction($1);}
+	;
+
+classList: classDeclaration
+	| classDeclaration classList
+	;
+
+classDeclaration: className OPEN_BRACKET attrList CLOSE_BRACKET
+	;
+
+className: CAPITALIZED_NAME
+	;
+
+attrList: attrDeclaration 
+	| attrDeclaration attrList
+	;
+
+attrDeclaration: dataType attrName SEMI_COLON
+	;
+
+dataType: INTEGER 
+	| STRING 
+	| BOOLEAN
+	;
+
+attrName: ALPHANUMERIC_NAME
+	;
+
+codeSection: codeList
+	;
+
+codeList: codeComponents 
+	| codeComponents codeList
+	;
+
+codeComponents: ifStatement 
+	| whileStatement 
+	| variableList 
+	| variableDefinition
+	;
+
+ifStatement: IF condition OPEN_BRACKET codeList CLOSE_BRACKET elseStatement
+	;
+
+elseStatement: %empty 
+	| ELSE OPEN_BRACKET codeList CLOSE_BRACKET
+	;
+
+whileStatement: WHILE condition OPEN_BRACKET codeList CLOSE_BRACKET
+	;
+
+condition: OPEN_PARENTHESIS logicalExpression CLOSE_PARENTHESIS
+	;
+
+variableList: variableDefinition
+	| variableDefinition variableList
+	;
+
+variableDefinition: dataType variableInitialized
+	;
+
+variableInitialized: ALPHANUMERIC_NAME EQ /* VALUE */ SEMI_COLON
+	;
+
+logicalExpression: logicalExpression AND logicalExpression
+	| logicalExpression OR logicalExpression
+	| 
+	;
+
 
 expression: expression[left] ADD expression[right]					{ $$ = AdditionExpressionGrammarAction($left, $right); }
 	| expression[left] SUB expression[right]						{ $$ = SubtractionExpressionGrammarAction($left, $right); }
