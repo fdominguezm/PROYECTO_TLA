@@ -30,17 +30,15 @@ int IntegerConstantGrammarAction(const int value);
 
 int CapitalizedWordGrammarAction(); 
 
-/*
 int AlphanumericWordGrammarAction(); 
-*/
 
 int ClassDefinitionsGrammarAction();
-/*
-int IntegerTypeGrammarAction();
 
-int StringTypeGrammarAction();
+int IntegerGrammarAction();
 
-int BooleanTypeGrammarAction();
+int StringGrammarAction();
+
+int BooleanGrammarAction();
 
 int GreaterThanGrammarAction(); 
 
@@ -60,23 +58,27 @@ int NewKeywordGrammarAction();
 
 int IfKeywordGrammarAction(); 
 	
-
 int WhileKeywordGrammarAction();
-
 
 int ElseKeywordGrammarAction(); 
 
-
 int TrueKeywordGrammarAction(); 
-
-
 
 int FalseKeywordGrammarAction(); 
 
-
-
 int EqualEqualGrammarAction();
 
+int EqualGrammarAction();
 
-*/
+int CommaGrammarAction();
+
+int MaxValueGrammarAction();
+
+int MinValueGrammarAction();
+
+int AverageValueGrammarAction();
+
+int DeleteGrammarAction(); 
+
+
 #endif

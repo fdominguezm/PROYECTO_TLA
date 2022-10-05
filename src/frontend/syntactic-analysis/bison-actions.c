@@ -174,4 +174,17 @@ int EqualEqualGrammarAction() {
 	LogDebug("\tEqualEqualGrammarAction");
 	return 0;
 }
+
+int EqualGrammarAction();
+
+int CommaGrammarAction();
+
+int MaxValueGrammarAction();
+
+int MinValueGrammarAction();
+
+int AverageValueGrammarAction();
+
+int DeleteGrammarAction(); 
+
 */
