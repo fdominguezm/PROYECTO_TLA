@@ -201,7 +201,8 @@ paramList: dataValue
 	;
 	
 varEquals:  EQ dataValue semiColon 
-	|  EQ instanceAttribute semiColon
+	| EQ instanceAttribute semiColon
+	| EQ varName semiColon
 	| EQ classMethod semiColon
 	;
 
@@ -222,8 +223,6 @@ codeComponents: ifStatement
 	| varList 
 	| varName varEquals 
 	| instanceAttribute varEquals
-	| instanceAttribute EQ varName semiColon
-	| instanceAttribute EQ dataValue semiColon
 	| classMethod semiColon
 	| comment
 	;
@@ -250,6 +249,7 @@ logicalExpression: openPar logicalExpression[left] AND logicalExpression[right] 
 	| openPar varName closePar
 	| openPar instanceAttribute closePar
 	| openPar dataValue closePar
+	| openPar expression closePar
 	;
 
 
