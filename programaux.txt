@@ -9,3 +9,10 @@ CLASSES {
         bool married;
   }
 }
+
+int a = 28;
+string nombre = "julian";
+
+Person aPerson = new Person("Benja", 23, false);
+
+Person bPerson = new Person("Chule", 21, false);

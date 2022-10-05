@@ -86,22 +86,22 @@ int IntegerConstantGrammarAction(const int value) {
 	LogDebug("\tIntegerConstantGrammarAction(%d)", value);
 	return value;
 }
-/*
+
 int CapitalizedWordGrammarAction() {
 	LogDebug("\tCapitalizedWordGrammarAction");
 	return 0;
 }
-
+/*
 int AlphanumericWordGrammarAction() {
 	LogDebug("\tAlphanumericWordGrammarAction");
 	return 0;
 }
-
+*/
 int ClassDefinitionsGrammarAction() {
 	LogDebug("\tClassDefinitionsGrammarAction");
 	return 0;
 }
-
+/*
 int DataTypeGrammarAction() {
 	LogDebug("\tDataTypeGrammarAction");
 	return 0;

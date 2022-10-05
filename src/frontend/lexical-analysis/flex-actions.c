@@ -27,6 +27,14 @@ void EndCommentPatternAction() {
 	LogDebug("EndCommentPatternAction.");
 }
 
+void BeginStringPatternAction() {
+	LogDebug("BeginStringPatternAction.");
+}
+
+void EndStringPatternAction() {
+	LogDebug("EndStringPatternAction.");
+}
+
 token AdditionOperatorPatternAction(const char * lexeme) {
 	LogDebug("AdditionOperatorPatternAction: '%s'.", lexeme);
 	yylval.token = ADD;
@@ -94,7 +102,7 @@ token ClassDefinitionsPatternAction(const char * lexeme) {
 }
 
 token DataTypePatternAction(const char * lexeme) {
-	LogDebug("GreaterThanPatternAction: '%s'.", lexeme);
+	LogDebug("DataTypePatternAction: '%s'.", lexeme);
 	
 	if(strcmp(lexeme, "string") == 0) {
  		yylval.token = STRING;
@@ -120,6 +128,19 @@ token LessThanPatternAction(const char * lexeme) {
 	LogDebug("LessThanPatternAction: '%s'.", lexeme);
 	yylval.token = LT;
 	return LT;
+}
+
+
+token GreaterEqualThanPatternAction(const char * lexeme) {
+	LogDebug("GreaterEqualThanPatternAction: '%s'.", lexeme);
+	yylval.token = GTEQ;
+	return GTEQ;
+}
+
+token LessEqualThanPatternAction(const char * lexeme) {
+	LogDebug("LessEqualThanPatternAction: '%s'.", lexeme);
+	yylval.token = LTEQ;
+	return LTEQ;
 }
 
 token OpenBracketPatternAction(const char * lexeme) {
@@ -192,4 +213,76 @@ token EqualEqualPatternAction(const char * lexeme) {
 	LogDebug("EqualEqualPatternAction: '%s'.", lexeme);
 	yylval.token = EQEQ;
 	return EQEQ;	
+}
+
+token EqualPatternAction(const char * lexeme) {
+	LogDebug("EqualPatternAction: '%s'.", lexeme);
+	yylval.token = EQ;
+	return EQ;	
+}
+
+token NotEqualPatternAction(const char * lexeme) {
+	LogDebug("NotEqualPatternAction: '%s'.", lexeme);
+	yylval.token = NOTEQ;
+	return NOTEQ;	
+}
+
+token AndPatternAction(const char * lexeme) {
+	LogDebug("AndPatternAction: '%s'.", lexeme);
+	yylval.token = AND;
+	return AND;
+}
+
+token OrPatternAction(const char * lexeme) {
+	LogDebug("OrPatternAction: '%s'.", lexeme);
+	yylval.token = OR;
+	return OR;
+}
+
+token StringPatternAction(const char * lexeme, const int length) {
+	LogDebug("StringPatternAction: '%s'.", lexeme);
+	yylval.token = STRING_VALUE;
+	return STRING_VALUE;
+}
+
+token StringValuePatternAction(const char * lexeme){
+	LogDebug("StringValuePatternAction: '%s'.", lexeme);
+	yylval.token = STRING_VALUE;
+	return STRING_VALUE;	
+}
+
+token CommaPatternAction(const char * lexeme) {
+	LogDebug("CommaValuePatternAction: '%s'.", lexeme);
+	yylval.token = COMMA;
+	return COMMA;
+}
+
+token IntegerValuePatternAction(const char * lexeme) {
+	LogDebug("IntegerValuePatternAction: '%s'.", lexeme);
+	yylval.token = INTEGER_VALUE;
+	return INTEGER_VALUE;	
+}
+
+token MinValuePatternAction(const char * lexeme) {
+	LogDebug("MinValuePatternAction: '%s'.", lexeme);
+	yylval.token = MIN;
+	return MIN;	
+}
+
+token MaxValuePatternAction(const char * lexeme) {
+	LogDebug("MaxValuePatternAction: '%s'.", lexeme);
+	yylval.token = MAX;
+	return MAX;	
+}
+
+token AverageValuePatternAction(const char * lexeme) {
+	LogDebug("AverageValuePatternAction: '%s'.", lexeme);
+	yylval.token = AVG;
+	return AVG;	
+}
+
+token DeletePatternAction(const char * lexeme) {
+	LogDebug("DeletePatternAction: '%s'.", lexeme);
+	yylval.token = DELETE;
+	return DELETE;	
 }

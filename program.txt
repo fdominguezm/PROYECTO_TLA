@@ -1,12 +1,12 @@
 CLASSES {
-  // se crea la tabla House
+
   House {
     int size;
     int rooms;
     bool for_sale;
     string address;
   }
-  // se crea la tabla Person
+
   Person {
     string name;
     int age;
@@ -27,11 +27,18 @@ House aHouse = new House(40, 2, false, "Luis Maria Campos 1386");
 aPerson.name = "Fausto";
 bPerson.name = aPerson.name;
 
-if (aPerson.age >= 22) {
+if ((aPerson.age) >= (22)) {
   b = aPerson.age;
 }
 
-bPerson.age = HOUSE.max(size);
+while((a) == (28)){
+  jkdsajk = 9;
+}
 
-// elimino la tupla aPerson de la tabla de personas
-aPerson.delete()
+if (((a) > (9)) && ((b) <= (22))) {
+  b = aPerson.age;
+}
+
+/* le asigno el max size de las insancias de House a age de bPerson */
+bPerson.age = House.max(size);
+

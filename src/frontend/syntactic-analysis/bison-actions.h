@@ -27,14 +27,20 @@ int ConstantFactorGrammarAction(const int value);
 
 // Constantes.
 int IntegerConstantGrammarAction(const int value);
-/*
+
 int CapitalizedWordGrammarAction(); 
 
+/*
 int AlphanumericWordGrammarAction(); 
+*/
 
-int ClassDefinitionsGrammarAction(); 
+int ClassDefinitionsGrammarAction();
+/*
+int IntegerTypeGrammarAction();
 
-int DataTypeGrammarAction(); 
+int StringTypeGrammarAction();
+
+int BooleanTypeGrammarAction();
 
 int GreaterThanGrammarAction(); 
 

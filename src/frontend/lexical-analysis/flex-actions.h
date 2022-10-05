@@ -30,7 +30,6 @@ token DivisionOperatorPatternAction(const char * lexeme);
 token MultiplicationOperatorPatternAction(const char * lexeme);
 token OpenParenthesisPatternAction(const char * lexeme);
 token SubtractionOperatorPatternAction(const char * lexeme);
-token BeginStringPatternAction(const char * lexeme);
 
 token CapitalizedWordPatternAction(const char * lexeme);
 
@@ -42,6 +41,9 @@ token DataTypePatternAction(const char * lexeme);
 token GreaterThanPatternAction(const char * lexeme);
 
 token LessThanPatternAction(const char * lexeme);
+
+token GreaterEqualThanPatternAction(const char * lexeme);
+token LessEqualThanPatternAction(const char * lexeme);
 
 token OpenBracketPatternAction(const char * lexeme);
 token CloseBracketPatternAction(const char * lexeme);
@@ -63,12 +65,41 @@ token TrueKeywordPatternAction(const char * lexeme);
 
 token FalseKeywordPatternAction(const char * lexeme);
 
+token EqualPatternAction(const char * lexeme);
+
+token NotEqualPatternAction(const char * lexeme);
+
 token EqualEqualPatternAction(const char * lexeme); 
 
+token OrPatternAction(const char * lexeme);
+
+token AndPatternAction(const char * lexeme);
 // Patrón desconocido, permite abortar debido a un error de sintaxis.
 token UnknownPatternAction(const char * lexeme, const int length);
 
 // Regla que no hace nada, permite ignorar parte de la entrada.
 void IgnoredPatternAction(const char * lexeme, const int length);
+
+token StringPatternAction(const char * lexeme, const int length); 
+
+// String context
+void BeginStringPatternAction();
+void EndStringPatternAction();
+
+token CommaPatternAction(const char * lexeme);
+
+token StringValuePatternAction(const char * lexeme);
+
+token IntegerValuePatternAction(const char * lexeme);
+
+token BooleanValuePatternAction(const char * lexeme);
+
+token MaxValuePatternAction(const char * lexeme);
+
+token MinValuePatternAction(const char * lexeme);
+
+token AverageValuePatternAction(const char * lexeme);
+
+token DeletePatternAction(const char * lexeme); 
 
 #endif
