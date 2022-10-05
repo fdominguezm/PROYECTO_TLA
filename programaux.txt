@@ -1,0 +1,11 @@
+CLASSES {
+    Auto {
+        string modelo;
+        int anio;
+    }
+    Person {
+        string name;
+        int age;
+        bool married;
+  }
+}

@@ -27,5 +27,50 @@ int ConstantFactorGrammarAction(const int value);
 
 // Constantes.
 int IntegerConstantGrammarAction(const int value);
+/*
+int CapitalizedWordGrammarAction(); 
 
+int AlphanumericWordGrammarAction(); 
+
+int ClassDefinitionsGrammarAction(); 
+
+int DataTypeGrammarAction(); 
+
+int GreaterThanGrammarAction(); 
+
+int LessThanGrammarAction(); 
+
+int OpenBracketGrammarAction(); 
+
+int CloseBracketGrammarAction();
+
+int DotGrammarAction(); 
+
+int SemicolonGrammarAction(); 
+
+int ReturnKeywordGrammarAction(); 
+
+int NewKeywordGrammarAction();
+
+int IfKeywordGrammarAction(); 
+	
+
+int WhileKeywordGrammarAction();
+
+
+int ElseKeywordGrammarAction(); 
+
+
+int TrueKeywordGrammarAction(); 
+
+
+
+int FalseKeywordGrammarAction(); 
+
+
+
+int EqualEqualGrammarAction();
+
+
+*/
 #endif

@@ -45,12 +45,6 @@ token DivisionOperatorPatternAction(const char * lexeme) {
 	return DIV;
 }
 
-token IntegerPatternAction(const char * lexeme, const int length) {
-	LogDebug("IntegerPatternAction: '%s' (length = %d).", lexeme, length);
-	yylval.integer = atoi(lexeme);
-	return INTEGER;
-}
-
 token MultiplicationOperatorPatternAction(const char * lexeme) {
 	LogDebug("MultiplicationOperatorPatternAction: '%s'.", lexeme);
 	yylval.token = MUL;
@@ -81,29 +75,25 @@ void IgnoredPatternAction(const char * lexeme, const int length) {
 	// Como no debe hacer nada con el patrón, solo se loguea en consola.
 }
 
-token CapitalizedWordPatternAction(const char * lexeme, const int length) {
+token CapitalizedWordPatternAction(const char * lexeme) {
 	LogDebug("CapitalizedWordPatternAction: '%s'.", lexeme);
-	char * aux = malloc(length+1);
-	strncpy(aux, lexeme, length);
-	yylval.string = aux;
+	yylval.token = CAPITALIZED_NAME;
 	return CAPITALIZED_NAME;
 }
 
-token AlphanumericWordPatternAction(const char * lexeme, const int length) {
+token AlphanumericWordPatternAction(const char * lexeme) {
 	LogDebug("AlphanumericWordPatternAction: '%s'.", lexeme);
-	char * aux = malloc(length+1);
-	strncpy(aux, lexeme, length);
-	yylval.string = aux;
+	yylval.token = ALPHANUMERIC_NAME;
 	return ALPHANUMERIC_NAME;
 }
 
-token ClassDefinitionsPatternAction(const char * lexeme, const int length) {
+token ClassDefinitionsPatternAction(const char * lexeme) {
 	LogDebug("ClassDefinitionsPatternAction: '%s'.", lexeme);
 	yylval.token = CLASS_SECTION;
 	return CLASS_SECTION;
 }
 
-token DataTypePatternAction(const char * lexeme, const int length) {
+token DataTypePatternAction(const char * lexeme) {
 	LogDebug("GreaterThanPatternAction: '%s'.", lexeme);
 	
 	if(strcmp(lexeme, "string") == 0) {
@@ -169,19 +159,37 @@ token NewKeywordPatternAction(const char * lexeme) {
 }
 
 token IfKeywordPatternAction(const char * lexeme) {
-	LogDebug("NewKeywordPatternAction: '%s'.", lexeme);
+	LogDebug("IfKeywordPatternAction: '%s'.", lexeme);
 	yylval.token = IF;
 	return IF;
 }
 
 token WhileKeywordPatternAction(const char * lexeme) {
-	LogDebug("NewKeywordPatternAction: '%s'.", lexeme);
+	LogDebug("WhileKeywordPatternAction: '%s'.", lexeme);
 	yylval.token = WHILE;
 	return WHILE;
 }
 
 token ElseKeywordPatternAction(const char * lexeme) {
-	LogDebug("NewKeywordPatternAction: '%s'.", lexeme);
+	LogDebug("ElseKeywordPatternAction: '%s'.", lexeme);
 	yylval.token = ELSE;
 	return ELSE;
+}
+
+token TrueKeywordPatternAction(const char * lexeme) {
+	LogDebug("NewKeywordPatternAction: '%s'.", lexeme);
+	yylval.token = TRUEE;
+	return TRUEE;
+}
+
+token FalseKeywordPatternAction(const char * lexeme) {
+	LogDebug("FalseKeywordPatternAction: '%s'.", lexeme);
+	yylval.token = FALSEE;
+	return FALSEE;
+}
+
+token EqualEqualPatternAction(const char * lexeme) {
+	LogDebug("EqualEqualPatternAction: '%s'.", lexeme);
+	yylval.token = EQEQ;
+	return EQEQ;	
 }

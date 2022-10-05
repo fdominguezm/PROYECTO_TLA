@@ -17,10 +17,18 @@
 
 	// No-terminales (frontend).
 	int program;
+
 	int classSection;
 	int classList;
 	int classDeclaration;
 	int className;
+	int classAttribute;
+
+	int varList;
+	int varDeclaration;
+	int varName;
+	int varEquals;
+
 	int attrList;
 	int attrDeclaration;
 	int dataType;
@@ -28,6 +36,7 @@
 
 	int codeSection;
 	int codeComponents;
+
 	int ifStatement;
 	int elseStatement;
 	int whileStatement;
@@ -42,10 +51,8 @@
 	int constant;
 
 	// Terminales.
-	token token;
-	int integer;
-	char * string;
-	int bool;
+	int token;
+
 }
 
 // IDs y tipos de los tokens terminales generados desde Flex.
@@ -59,6 +66,7 @@
 %token <token> EQEQ
 %token <token> GT
 %token <token> LT
+%token <token> NOTEQ
 
 %token <token> OPEN_PARENTHESIS
 %token <token> CLOSE_PARENTHESIS
@@ -73,9 +81,9 @@
 %token <token> NEW
 %token <token> RETURN
 
-%token <integer> INTEGER
-%token <string> STRING
-%token <bool> BOOLEAN
+%token <token> INTEGER
+%token <token> STRING
+%token <token> BOOLEAN
 
 %token <token> CAPITALIZED_NAME
 %token <token> ALPHANUMERIC_NAME
@@ -86,12 +94,37 @@
 
 %token <token> AND
 %token <token> OR
+%token <token> TRUEE
+%token <token> FALSEE
 
 // Tipos de dato para los no-terminales generados desde Bison.
 %type <program> program
 %type <expression> expression
 %type <factor> factor
 %type <constant> constant
+%type <classSection> classSection;
+%type <classList> classList;
+%type <classDeclaration> classDeclaration;
+%type <className> className;
+%type <classAttribute> classAttribute;
+%type <varList> varList;
+%type <varDeclaration> varDeclaration;
+%type <varName> varName;
+%type <varEquals> varEquals;
+%type <attrList> attrList;
+%type <attrDeclaration> attrDeclaration;
+%type <dataType> dataType;
+%type <attrName> attrName;
+%type <codeSection> codeSection;
+%type <codeComponents> codeComponents;
+%type <ifStatement> ifStatement;
+%type <elseStatement> elseStatement;
+%type <whileStatement> whileStatement;
+%type <variableList> variableList;
+%type <variableDefinition> variableDefinition;
+%type <condition> condition;
+%type <logicalExpression> logicalExpression;
+
 
 // Reglas de asociatividad y precedencia (de menor a mayor).
 %left ADD SUB
@@ -103,28 +136,38 @@
 
 %%
 
-program: classSection codeSection									//{ $$ = ProgramGrammarAction($1); }
+program: classSection /*codeSection*/									{ $$ = ProgramGrammarAction($1); }
 	;
 
-classSection: CLASS_SECTION OPEN_BRACKET classList CLOSE_BRACKET	//									{ $$ = ClassDefinitionsPatternAction($1);}
+classSection: CLASS_SECTION OPEN_BRACKET classList CLOSE_BRACKET		//{ $$ = ClassDefinitionsGrammarAction(); }							{ $$ = ClassDefinitionsPatternAction($1);}
 	;
 
 classList: classDeclaration
 	| classDeclaration classList
 	;
 
-classDeclaration: className OPEN_BRACKET attrList CLOSE_BRACKET
+classDeclaration: className OPEN_BRACKET attrList CLOSE_BRACKET			
 	;
+
+attrList: varDeclaration | varDeclaration attrList
+    ;
 
 className: CAPITALIZED_NAME
 	;
 
-attrList: attrDeclaration 
-	| attrDeclaration attrList
+classAttribute: className DOT varName
 	;
 
-attrDeclaration: dataType attrName SEMI_COLON
+varList: varDeclaration 
+	| varDeclaration varList
 	;
+
+varName: ALPHANUMERIC_NAME
+
+varDeclaration: dataType varName SEMI_COLON | dataType varEquals
+	;
+
+varEquals: varName EQ ALPHANUMERIC_NAME SEMI_COLON
 
 dataType: INTEGER 
 	| STRING 
@@ -143,36 +186,29 @@ codeList: codeComponents
 
 codeComponents: ifStatement 
 	| whileStatement 
-	| variableList 
-	| variableDefinition
+	| varList 
+	| varEquals 
+	| classAttribute EQ varName SEMI_COLON
+	| classAttribute EQ /*VALUES*/ SEMI_COLON
 	;
 
-ifStatement: IF condition OPEN_BRACKET codeList CLOSE_BRACKET elseStatement
+ifStatement: IF logicalExpression OPEN_BRACKET codeList CLOSE_BRACKET elseStatement
 	;
 
 elseStatement: %empty 
+	| ELSE ifStatement
 	| ELSE OPEN_BRACKET codeList CLOSE_BRACKET
 	;
 
-whileStatement: WHILE condition OPEN_BRACKET codeList CLOSE_BRACKET
+whileStatement: WHILE logicalExpression OPEN_BRACKET codeList CLOSE_BRACKET
 	;
 
-condition: OPEN_PARENTHESIS logicalExpression CLOSE_PARENTHESIS
-	;
-
-variableList: variableDefinition
-	| variableDefinition variableList
-	;
-
-variableDefinition: dataType variableInitialized
-	;
-
-variableInitialized: ALPHANUMERIC_NAME EQ /* VALUE */ SEMI_COLON
-	;
-
-logicalExpression: logicalExpression AND logicalExpression
-	| logicalExpression OR logicalExpression
-	| 
+logicalExpression: OPEN_PARENTHESIS logicalExpression[left] AND logicalExpression[right] CLOSE_PARENTHESIS
+	| OPEN_PARENTHESIS logicalExpression[left] OR logicalExpression[right] CLOSE_PARENTHESIS
+	| OPEN_PARENTHESIS logicalExpression[left] EQEQ logicalExpression[right] CLOSE_PARENTHESIS
+	| OPEN_PARENTHESIS logicalExpression[left] NOTEQ logicalExpression[right] CLOSE_PARENTHESIS
+	| varName
+	| classAttribute
 	;
 
 

@@ -1,6 +1,7 @@
 %{
 
 #include "flex-actions.h"
+#include <stdio.h>
 
 %}
 
@@ -24,20 +25,6 @@ whitespace		[ \f\n\r\t\v]
 
 %%
 
-"/*"										{ BEGIN(COMMENT); BeginCommentPatternAction(); }
-<COMMENT>.							{ ; }
-<COMMENT>{endline}			{ ; }
-<COMMENT>"*/"						{ EndCommentPatternAction(); BEGIN(INITIAL); }
-
-"\""                    { BEGIN(STRING); return BeginStringPatternAcction(); }
-<STRING>[^\"]*          { return StringPatternAction(yytext); }
-<STRING>{endline}       { return UnknownPatternAction(yytext, yyleng)}
-<STRING>"\""            { EndStringPatternAction(); BEGIN(INITIAL)}
-
-[A-Z][a-z]*             { return CapitalizedWordPatternAction(yytext); }
-[a-zA-Z][a-zA-Z0-9_]*   { return AlphanumericWordPatternAction(yytext); }
-[0-9]+ |  | TrueKeywordPatternAction() |     
-
 "CLASSES"               { return ClassDefinitionsPatternAction(yytext); }
 
 "int"|"string"|"bool"   { return DataTypePatternAction(yytext); }
@@ -45,16 +32,14 @@ whitespace		[ \f\n\r\t\v]
 "return"                { return ReturnKeywordPatternAction(yytext);  }
 "if"                    { return IfKeywordPatternAction(yytext);  } 
 "else"                  { return ElseKeywordPatternAction(yytext);  }
-"while"                 { return WhileReturnKeywordPatternAction(yytext);  }
+"while"                 { return WhileKeywordPatternAction(yytext);  }
 "true"                  { return TrueKeywordPatternAction(yytext);}
 "false"                 { return FalseKeywordPatternAction(yytext);}
-
 "{"                     { return OpenBracketPatternAction(yytext); }
 "}"                     { return CloseBracketPatternAction(yytext); }
 ";"                     { return SemicolonPatternAction(yytext); }
 
 "."                     { return DotPatternAction(yytext);  }
-
 "=="                    { return EqualEqualPatternAction(yytext); }
 "<"                     { return LessThanPatternAction(yytext); }
 ">"                     { return GreaterThanPatternAction(yytext); }
@@ -67,10 +52,9 @@ whitespace		[ \f\n\r\t\v]
 "("											{ return OpenParenthesisPatternAction(yytext); }
 ")"											{ return CloseParenthesisPatternAction(yytext); }
 
-{digit}+								{ return IntegerPatternAction(yytext, yyleng); }
-
-{whitespace}						{ IgnoredPatternAction(yytext, yyleng); }
-
+[A-Z][a-z]*             { return CapitalizedWordPatternAction(yytext); }
+[a-zA-Z][a-zA-Z0-9_]*   { return AlphanumericWordPatternAction(yytext); }  
+{whitespace}+					{ IgnoredPatternAction(yytext, yyleng); }
 .											  { return UnknownPatternAction(yytext, yyleng); }
 
 %%

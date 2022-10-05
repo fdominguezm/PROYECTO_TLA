@@ -27,10 +27,43 @@ void EndCommentPatternAction();
 token AdditionOperatorPatternAction(const char * lexeme);
 token CloseParenthesisPatternAction(const char * lexeme);
 token DivisionOperatorPatternAction(const char * lexeme);
-token IntegerPatternAction(const char * lexeme, const int length);
 token MultiplicationOperatorPatternAction(const char * lexeme);
 token OpenParenthesisPatternAction(const char * lexeme);
 token SubtractionOperatorPatternAction(const char * lexeme);
+token BeginStringPatternAction(const char * lexeme);
+
+token CapitalizedWordPatternAction(const char * lexeme);
+
+token AlphanumericWordPatternAction(const char * lexeme);
+
+token ClassDefinitionsPatternAction(const char * lexeme);
+token DataTypePatternAction(const char * lexeme);
+
+token GreaterThanPatternAction(const char * lexeme);
+
+token LessThanPatternAction(const char * lexeme);
+
+token OpenBracketPatternAction(const char * lexeme);
+token CloseBracketPatternAction(const char * lexeme);
+
+token DotPatternAction(const char * lexeme);
+token SemicolonPatternAction(const char * lexeme);
+
+token ReturnKeywordPatternAction(const char * lexeme);
+
+token NewKeywordPatternAction(const char * lexeme);
+
+token IfKeywordPatternAction(const char * lexeme);
+
+token WhileKeywordPatternAction(const char * lexeme);
+
+token ElseKeywordPatternAction(const char * lexeme);
+
+token TrueKeywordPatternAction(const char * lexeme);
+
+token FalseKeywordPatternAction(const char * lexeme);
+
+token EqualEqualPatternAction(const char * lexeme); 
 
 // Patrón desconocido, permite abortar debido a un error de sintaxis.
 token UnknownPatternAction(const char * lexeme, const int length);

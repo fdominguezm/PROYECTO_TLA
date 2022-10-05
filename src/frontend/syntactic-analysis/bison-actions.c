@@ -86,3 +86,92 @@ int IntegerConstantGrammarAction(const int value) {
 	LogDebug("\tIntegerConstantGrammarAction(%d)", value);
 	return value;
 }
+/*
+int CapitalizedWordGrammarAction() {
+	LogDebug("\tCapitalizedWordGrammarAction");
+	return 0;
+}
+
+int AlphanumericWordGrammarAction() {
+	LogDebug("\tAlphanumericWordGrammarAction");
+	return 0;
+}
+
+int ClassDefinitionsGrammarAction() {
+	LogDebug("\tClassDefinitionsGrammarAction");
+	return 0;
+}
+
+int DataTypeGrammarAction() {
+	LogDebug("\tDataTypeGrammarAction");
+	return 0;
+}
+
+int GreaterThanGrammarAction() {
+	LogDebug("\tGreaterThanGrammarAction");
+	return 0;
+}
+
+int LessThanGrammarAction() {
+	LogDebug("\tLessThanGrammarAction");
+	return 0;
+}
+
+int OpenBracketGrammarAction() {
+	LogDebug("\tOpenBracketGrammarAction");
+	return 0;
+}
+int CloseBracketGrammarAction() {
+	LogDebug("\tCloseBracketGrammarAction");
+	return 0;
+}
+
+int DotGrammarAction() {
+	LogDebug("\tDotGrammarAction");
+	return 0;
+}
+int SemicolonGrammarAction() {
+	LogDebug("\tSemicolonGrammarAction");
+	return 0;
+}
+
+int ReturnKeywordGrammarAction() {
+	LogDebug("\tReturnKeywordGrammarAction");
+	return 0;
+}
+
+int NewKeywordGrammarAction() {
+	LogDebug("\tNewKeywordGrammarAction");
+	return 0;
+}
+
+int IfKeywordGrammarAction() {
+	LogDebug("\tIfKeywordGrammarAction");
+	return 0;
+}
+
+int WhileKeywordGrammarAction() {
+	LogDebug("\tWhileKeywordGrammarAction");
+	return 0;
+}
+
+int ElseKeywordGrammarAction() {
+	LogDebug("\tElseKeywordGrammarAction");
+	return 0;
+}
+
+int TrueKeywordGrammarAction() {
+	LogDebug("\tTrueKeywordGrammarAction");
+	return 0;
+}
+
+int FalseKeywordGrammarAction() {
+	LogDebug("\tFalseKeywordGrammarAction");
+	return 0;
+}
+
+int EqualEqualGrammarAction() {
+	LogDebug("\tEqualEqualGrammarAction");
+	return 0;
+}
+*/
