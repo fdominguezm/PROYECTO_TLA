@@ -3,6 +3,10 @@
 #include <stdlib.h>
 #include <string.h>
 
+#ifndef YYUNDEF
+#define YYUNDEF 2
+#endif
+
 /**
  * Implementación de "flex-actions.h".
  *

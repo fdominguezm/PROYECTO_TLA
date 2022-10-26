@@ -220,7 +220,7 @@ codeList: codeComponents
 
 codeComponents: ifStatement 
 	| whileStatement 
-	| varList 
+	| varDeclaration 
 	| varName varEquals 
 	| instanceAttribute varEquals
 	| classMethod semiColon
