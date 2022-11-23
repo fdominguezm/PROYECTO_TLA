@@ -50,12 +50,14 @@
 
 	char * methods;
 
+	tMethods * methods;
+
 	// Terminales.
 	int token;
 	char * stringToken;
 	int integer;
 	char * className;
-
+	char * varName;
 }
 
 // IDs y tipos de los tokens terminales generados desde Flex.
@@ -93,7 +95,7 @@
 %token <token> STRING_VALUE
 
 %token <className> CAPITALIZED_NAME
-%token <stringToken> ALPHANUMERIC_NAME
+%token <token> ALPHANUMERIC_NAME
 
 %token <stringToken> IF
 %token <stringToken> ELSE
@@ -133,9 +135,7 @@
 %type <logicalExpression> logicalExpression
 %type <classMethod> classMethod
 %type <dataValue> dataValue
-%type <methods> methods
-%type <codeList> codeList
-%type <comment> comment
+
 
 // Reglas de asociatividad y precedencia (de menor a mayor).
 %left ADD SUB
@@ -173,7 +173,7 @@ varList: varDeclaration 																	{ $$ = VarDeclarationGrammarAction($1);
 
 varDeclaration: dataType ALPHANUMERIC_NAME SEMI_COLON 															{ $$ = DataTypeAndVarNameGrammarAction($1,$2);}
 	| dataType ALPHANUMERIC_NAME varEquals SEMI_COLON															{ $$ = DataTypeVarNameAndVarEqualsGrammarAction($1,$2,$3);}
-	| CAPITALIZED_NAME ALPHANUMERIC_NAME EQ NEW CAPITALIZED_NAME OPEN_PARENTHESIS paramList CLOSE_PARENTHESIS SEMI_COLON	{ $$ = VarNameParamListGrammarAction($1,$2,$7);}
+	| CAPITALIZED_NAME ALPHANUMERIC_NAME EQ NEW CAPITALIZED_NAME OPEN_PARENTHESIS paramList CLOSE_PARENTHESIS SEMI_COLON;	{ $$ = VarNameParamListGrammarAction($1,$2,$7);}
 	;
 
 dataValue: TRUEE																			{ $$ = TrueGrammarAction(); }
@@ -215,7 +215,7 @@ codeComponents: ifStatement 																{ $$ = IfGrammarAction($1); }
 
 ifStatement: IF logicalExpression OPEN_BRACKET codeList CLOSE_BRACKET elseStatement			{$$ = IfInitializedGrammarAction($2, $4, $5);}
 	;
-
+	
 elseStatement: %empty 																		{ $$ = EmptyGrammarAction();}
 	| ELSE ifStatement																		{ $$ = ElseIfGrammarAction($2); }
 	| ELSE OPEN_BRACKET codeList CLOSE_BRACKET												{ $$ = ElseCodeListGrammarAction($3); }

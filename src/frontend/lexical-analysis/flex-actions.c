@@ -87,19 +87,23 @@ void IgnoredPatternAction(const char * lexeme, const int length) {
 	// Como no debe hacer nada con el patrón, solo se loguea en consola.
 }
 
-token CapitalizedWordPatternAction(const char * lexeme, int len) {
+token CapitalizedWordPatternAction(const char * lexeme, int length) {
 	LogDebug("CapitalizedWordPatternAction: '%s'.", lexeme);
 	// Reservar memoria para el lexema identificado y el \0 final:
-	char * text = (char *) calloc(len + 1, sizeof(char));
+	char * text = (char *) calloc(length + 1, sizeof(char));
 	// Copiar el lexema y \0 para evitar segmentation-faults:
 	strncpy(text, lexeme, len);
 	yylval.className = text;
 	return CAPITALIZED_NAME;
 }
 
-token AlphanumericWordPatternAction(const char * lexeme, int len) {
+token AlphanumericWordPatternAction(const char * lexeme, int length) {
 	LogDebug("AlphanumericWordPatternAction: '%s'.", lexeme);
-	yylval.token = ALPHANUMERIC_NAME;
+	// Reservar memoria para el lexema identificado y el \0 final:
+	char * text = (char *) calloc(length + 1, sizeof(char));
+	// Copiar el lexema y \0 para evitar segmentation-faults:
+	strncpy(text, lexeme, length);
+	yylval.varName = text;
 	return ALPHANUMERIC_NAME;
 }
 
