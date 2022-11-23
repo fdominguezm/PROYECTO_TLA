@@ -50,11 +50,13 @@
 
 	int comment;
 
+	tMethods * methods;
+
 	// Terminales.
 	int token;
 	int integer;
 	char * className;
-
+	char * varName;
 }
 
 // IDs y tipos de los tokens terminales generados desde Flex.
@@ -92,7 +94,7 @@
 %token <token> STRING_VALUE
 
 %token <className> CAPITALIZED_NAME
-%token <token> ALPHANUMERIC_NAME
+%token <varName> ALPHANUMERIC_NAME
 
 %token <token> IF
 %token <token> ELSE
@@ -132,6 +134,7 @@
 %type <logicalExpression> logicalExpression
 %type <classMethod> classMethod
 %type <dataValue> dataValue
+%type <methods> methods
 
 
 // Reglas de asociatividad y precedencia (de menor a mayor).
@@ -170,7 +173,7 @@ varList: varDeclaration 																	{ $$ = VarDeclarationGrammarAction($1);
 
 varDeclaration: dataType ALPHANUMERIC_NAME SEMI_COLON 															{ $$ = DataTypeAndVarNameGrammarAction($1,$2);}
 	| dataType ALPHANUMERIC_NAME varEquals SEMI_COLON															{ $$ = DataTypeVarNameAndVarEqualsGrammarAction($1,$2,$3);}
-	| CAPITALIZED_NAME ALPHANUMERIC_NAME EQ NEW CAPITALIZED_NAME OPEN_PARENTHESIS paramList CLOSE_PARENTHESIS SEMI_COLON;	{ $$ = VarNameParamListGrammarAction($1,$2,$7);}
+	| CAPITALIZED_NAME ALPHANUMERIC_NAME EQ NEW CAPITALIZED_NAME OPEN_PARENTHESIS paramList CLOSE_PARENTHESIS SEMI_COLON	{ $$ = VarNameParamListGrammarAction($1,$2,$7);}
 	;
 
 dataValue: TRUEE																			{ $$ = TrueGrammarAction(); }

@@ -177,10 +177,16 @@ typedef struct tClassDeclaration
 	tVarList * varList;
 }tClassDeclaration;
 
+typedef enum ClassListType {
+	CLASS_DECLARATION,
+	MULTIPLE_CLASS_DECLARATION
+} ClassListType;
+
 typedef struct tClassList
 {
 	tClassDeclaration * classDeclaration;
 	struct tClassList * next;
+	ClassListType type;
 }tClassList;
 
 

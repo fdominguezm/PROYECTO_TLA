@@ -31,9 +31,9 @@ token MultiplicationOperatorPatternAction(const char * lexeme);
 token OpenParenthesisPatternAction(const char * lexeme);
 token SubtractionOperatorPatternAction(const char * lexeme);
 
-token CapitalizedWordPatternAction(const char * lexeme);
+token CapitalizedWordPatternAction(const char * lexeme, int length);
 
-token AlphanumericWordPatternAction(const char * lexeme);
+token AlphanumericWordPatternAction(const char * lexeme, int length);
 
 token ClassDefinitionsPatternAction(const char * lexeme);
 token DataTypePatternAction(const char * lexeme);
@@ -90,7 +90,7 @@ token CommaPatternAction(const char * lexeme);
 
 token StringValuePatternAction(const char * lexeme);
 
-token IntegerValuePatternAction(const char * lexeme);
+token IntegerValuePatternAction(const char * lexeme, int length);
 
 token BooleanValuePatternAction(const char * lexeme);
 

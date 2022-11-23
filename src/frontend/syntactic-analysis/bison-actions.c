@@ -116,6 +116,7 @@ tClassList * ClassDeclarationGrammarAction(tClassDeclaration * classDeclaration)
 	}
 	res->classDeclaration = classDeclaration;
 	res->next = NULL;
+	res->type = CLASS_DECLARATION;
 	return res;
 }
 
@@ -127,6 +128,7 @@ tClassList * MultipleClassDeclarationGrammarAction(tClassDeclaration * classDecl
 	}
 	res->classDeclaration = classDeclaration;
 	res->next = next;
+	res->type = MULTIPLE_CLASS_DECLARATION;
 	return res;
 }
 
@@ -154,7 +156,7 @@ tInstanceAtt * InstanceAttributeGrammarAction(char * instanceName, char * varNam
 
 tClassMethod * MethodsAndVarNameGrammarAction(char * className, char *  method, char * arguments){
 	LogDebug("\tMethodsAndVarNameGrammarAction()");
-	tClassMethod * res = calloc(BLOCK, sizeof(tClassMethod));
+	tClassMethod * res = (tClassMethod *) calloc(BLOCK, sizeof(tClassMethod));
 	if (res == NULL) {
 		return NULL;
 	}
