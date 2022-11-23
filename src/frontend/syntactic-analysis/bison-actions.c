@@ -493,20 +493,9 @@ tCodeComponents * WhileGrammarAction(tWhileStatement * whileStatement) {
 		return NULL;
 	}
 	res->whileStatement = whileStatement;
-<<<<<<< HEAD
-	res->ifStatement = NULL;
-	res->varDeclaration = NULL;
-	res->varName = NULL;
-	res->instanceAtt = NULL;
-	res->classMethod = NULL;
-	res->comment = NULL;
-	res->varEq = NULL;
-	res->type = 
-=======
-	res->type = WHILE_COMPONENT;
->>>>>>> 59124cd0dceea7df4b554c0b5990e7732c6d44b4
 	return res;
 }
+
 tCodeComponents * CodeVarDeclarationGrammarAction(tVarDeclaration * varDec) {
 	LogDebug("\tCodeVarDeclarationGrammarAction()");
 	tCodeComponents * res = calloc(BLOCK, sizeof(tCodeComponents));
