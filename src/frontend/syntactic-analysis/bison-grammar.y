@@ -21,16 +21,15 @@
 	int classSection;
 	int classList;
 	int classDeclaration;
-	int className;
 	int instanceAttribute;
 	int classMethod;
 
 	int varList;
 	int varDeclaration;
-	int varName;
 	int varEquals;
 	
 	int dataType;
+	int dataValue;
 
 	int codeSection;
 	int codeComponents;
@@ -49,13 +48,6 @@
 	int factor;
 	int constant;
 
-	int openBra;
-	int closeBra;
-	int openPar;
-	int closePar;
-	int semiColon;
-
-	int boolVal;
 	int comment;
 
 	// Terminales.
@@ -124,12 +116,10 @@
 %type <classSection> classSection
 %type <classList> classList
 %type <classDeclaration> classDeclaration
-%type <className> className
 %type <instanceAttribute> instanceAttribute
 %type <varList> varList
 %type <paramList> paramList
 %type <varDeclaration> varDeclaration
-%type <varName> varName
 %type <varEquals> varEquals
 %type <dataType> dataType
 %type <codeSection> codeSection
@@ -138,13 +128,8 @@
 %type <elseStatement> elseStatement
 %type <whileStatement> whileStatement
 %type <logicalExpression> logicalExpression
-%type <boolVal> boolVal
-%type <openBra> openBra
-%type <closeBra> closeBra
-%type <openPar> openPar
-%type <closePar> closePar
-%type <semiColon> semiColon
 %type <classMethod> classMethod
+%type <dataValue> dataValue
 
 
 // Reglas de asociatividad y precedencia (de menor a mayor).
@@ -157,142 +142,120 @@
 
 %%
 
-program: classSection codeSection									{ $$ = ProgramGrammarAction($1); }
+program: classSection codeSection															{ $$ = ProgramGrammarAction($1,$2); }		
 	;
 
-classSection: CLASS_SECTION openBra classList closeBra		{ $$ = ClassDefinitionsGrammarAction(); }		
+classSection: CLASS_SECTION OPEN_BRACKET classList CLOSE_BRACKET							{ $$ = ClassListGrammarAction($3); }	 
 	;
 
-classList: classDeclaration
-	| classDeclaration classList
+classList: classDeclaration																	{ $$ = ClassDeclarationGrammarAction($1); }
+	| classDeclaration classList															{ $$ = MultipleClassDeclarationGrammarAction($1,$2);}									
 	;
 
-classDeclaration: className openBra varList closeBra			
+classDeclaration: CAPITALIZED_NAME OPEN_BRACKET varList CLOSE_BRACKET								{ $$ = VarListGrammarAction($1,$3);}
 	;
 
-className: CAPITALIZED_NAME												{ $$ = CapitalizedWordGrammarAction(); }
+
+
+instanceAttribute: ALPHANUMERIC_NAME DOT ALPHANUMERIC_NAME														{ $$ = InstanceAttributeGrammarAction($1,$3);}
 	;
 
-instanceAttribute: varName DOT varName
+classMethod: CAPITALIZED_NAME DOT methods OPEN_PARENTHESIS ALPHANUMERIC_NAME CLOSE_PARENTHESIS				{ $$ = MethodsAndVarNameGrammarAction($1,$3,$5);}
 	;
 
-classMethod: className DOT methods openPar varName closePar
+varList: varDeclaration 																	{ $$ = VarDeclarationGrammarAction($1); }
+	| varDeclaration varList																{ $$ = MultipleVarDeclarationGrammarAction($1,$2);}
 	;
 
-varList: varDeclaration 
-	| varDeclaration varList
+varDeclaration: dataType ALPHANUMERIC_NAME SEMI_COLON 															{ $$ = DataTypeAndVarNameGrammarAction($1,$2);}
+	| dataType ALPHANUMERIC_NAME varEquals SEMI_COLON															{ $$ = DataTypeVarNameAndVarEqualsGrammarAction($1,$2,$3);}
+	| CAPITALIZED_NAME ALPHANUMERIC_NAME EQ NEW CAPITALIZED_NAME OPEN_PARENTHESIS paramList CLOSE_PARENTHESIS SEMI_COLON;	{ $$ = VarNameParamListGrammarAction($1,$2,$7);}
 	;
 
-varName: ALPHANUMERIC_NAME
-	;												//{ $$ = AlphanumericWordGrammarAction() }
-
-varDeclaration: dataType varName semiColon 
-	| dataType varName varEquals
-	| className varName EQ NEW className OPEN_PARENTHESIS paramList CLOSE_PARENTHESIS semiColon;
+dataValue: TRUEE																			{ $$ = TrueGrammarAction(); }
+	| FALSEE																				{ $$ = FalseGrammarAction(); }
+	| STRING_VALUE																			{ $$ = StringValueGrammarAction($1); }
+	| INTEGER_VALUE																			{ $$ = IntegerValueGrammarAction($1); }
 	;
 
-dataValue: boolVal
-	| STRING_VALUE
-	| INTEGER_VALUE
-	;
-
-paramList: dataValue
-	| dataValue COMMA paramList
+paramList: dataValue																		{ $$ = ParamListGrammarAction($1); }
+	| dataValue COMMA paramList																{ $$ = MultipleParamListGrammarAction($1,$3); }
 	;
 	
-varEquals:  EQ dataValue semiColon 
-	| EQ instanceAttribute semiColon
-	| EQ varName semiColon
-	| EQ classMethod semiColon
+varEquals:  EQ dataValue 														{ $$ = VarEqDataValueGrammarAction($2); }
+	| EQ instanceAttribute 														{ $$ = VarEqInstanceAttributeGrammarAction($2); }
+	| EQ ALPHANUMERIC_NAME 																	{ $$ = VarEqVarNameGrammarAction($2); }
+	| EQ classMethod 																{ $$ = VarEqClassMethodGrammarAction($2); }
 	;
 
-dataType: INTEGER 														//{ $$ = In}
-	| STRING 
-	| BOOLEAN
+dataType: INTEGER 																			{ $$ = TypeGrammarAction($1); }
+	| STRING 																				{ $$ = TypeGrammarAction($1); }
+	| BOOLEAN																				{ $$ = TypeGrammarAction($1); }
 	;
 
-codeSection: codeList
+codeSection: codeList																		{ $$ = CodeListGrammarAction($1); }
 	;
 
-codeList: codeComponents 
-	| codeComponents codeList
+codeList: codeComponents 																	{ $$ = CodeComponentsGrammarAction($1); }
+	| codeComponents codeList																{ $$ = MultipleCodeComponentsGrammarAction($1,$2);}
 	;
 
-codeComponents: ifStatement 
-	| whileStatement 
-	| varDeclaration 
-	| varName varEquals 
-	| instanceAttribute varEquals
-	| classMethod semiColon
-	| comment
+codeComponents: ifStatement 																{ $$ = IfGrammarAction($1); }
+	| whileStatement 																		{ $$ = WhileGrammarAction($1); }
+	| varDeclaration 																		{ $$ = CodeVarDeclarationGrammarAction($1); }
+	| ALPHANUMERIC_NAME varEquals SEMI_COLON 												{ $$ = VarNameEqualsVarGrammarAction($1);}
+	| instanceAttribute varEquals SEMI_COLON												{ $$ = InstanceAttributeEqualGrammarAction($1,$2);}
+	| classMethod SEMI_COLON																{ $$ = ClassMethodGrammarAction($1); }
+	| comment																				{ $$ = CommentCodeGrammarAction($1); }
 	;
 
-ifStatement: IF logicalExpression openBra codeList closeBra elseStatement
+ifStatement: IF logicalExpression OPEN_BRACKET codeList CLOSE_BRACKET elseStatement			{$$ = IfInitializedGrammarAction($2, $4, $5);}
 	;
 
-elseStatement: %empty 
-	| ELSE ifStatement
-	| ELSE openBra codeList closeBra
+elseStatement: %empty 																		{ $$ = EmptyGrammarAction();}
+	| ELSE ifStatement																		{ $$ = ElseIfGrammarAction($2); }
+	| ELSE OPEN_BRACKET codeList CLOSE_BRACKET												{ $$ = ElseCodeListGrammarAction($3); }
 	;
 
-whileStatement: WHILE logicalExpression openBra codeList closeBra
+whileStatement: WHILE logicalExpression OPEN_BRACKET codeList CLOSE_BRACKET					{ $$ = WhileInitializedGrammarAction($2,$4);}
 	;
 
-logicalExpression: openPar logicalExpression[left] AND logicalExpression[right] closePar
-	| openPar logicalExpression[left] OR logicalExpression[right] closePar
-	| openPar logicalExpression[left] EQEQ logicalExpression[right] closePar
-	| openPar logicalExpression[left] NOTEQ logicalExpression[right] closePar
-	| openPar logicalExpression[left] GT logicalExpression[right] closePar
-	| openPar logicalExpression[left] GTEQ logicalExpression[right] closePar
-	| openPar logicalExpression[left] LT logicalExpression[right] closePar
-	| openPar logicalExpression[left] LTEQ logicalExpression[right] closePar
-	| openPar varName closePar
-	| openPar instanceAttribute closePar
-	| openPar dataValue closePar
-	| openPar expression closePar
+logicalExpression:  logicalExpression[left] AND logicalExpression[right] 					{ $$ = MultipleLogicalExpressionGrammarAction($left, $2,$right); }
+	|  logicalExpression[left] OR logicalExpression[right] 									{ $$ = MultipleLogicalExpressionGrammarAction($left, $2,$right); }
+	|  logicalExpression[left] EQEQ logicalExpression[right] 								{ $$ = MultipleLogicalExpressionGrammarAction($left, $2,$right); }
+	|  logicalExpression[left] NOTEQ logicalExpression[right] 								{ $$ = MultipleLogicalExpressionGrammarAction($left, $2,$right); }
+	|  logicalExpression[left] GT logicalExpression[right] 									{ $$ = MultipleLogicalExpressionGrammarAction($left, $2,$right); }
+	|  logicalExpression[left] GTEQ logicalExpression[right] 								{ $$ = MultipleLogicalExpressionGrammarAction($left, $2,$right); }
+	|  logicalExpression[left] LT logicalExpression[right] 									{ $$ = MultipleLogicalExpressionGrammarAction($left, $2,$right); }
+	|  logicalExpression[left] LTEQ logicalExpression[right] 								{ $$ = MultipleLogicalExpressionGrammarAction($left, $2,$right); }
+	|  ALPHANUMERIC_NAME 																	{ $$ = VarNameLogicalExpressionGrammarAction($1); }
+	|  instanceAttribute 																	{ $$ = InstanceAttLogicalExpressionGrammarAction($1); }
+	|  dataValue 																			{ $$ = DataValueLogicalExpressionGrammarAction($1); }
+	|  expression 																			{ $$ = ExpressionLogicalExpressionGrammarAction($1); }
 	;
 
 
-expression: expression[left] ADD expression[right]					{ $$ = AdditionExpressionGrammarAction($left, $right); }
-	| expression[left] SUB expression[right]						{ $$ = SubtractionExpressionGrammarAction($left, $right); }
-	| expression[left] MUL expression[right]						{ $$ = MultiplicationExpressionGrammarAction($left, $right); }
-	| expression[left] DIV expression[right]						{ $$ = DivisionExpressionGrammarAction($left, $right); }
-	| factor														{ $$ = FactorExpressionGrammarAction($1); }
+expression: expression[left] ADD expression[right]											{ $$ = AdditionExpressionGrammarAction($left, $right); }
+	| expression[left] SUB expression[right]												{ $$ = SubtractionExpressionGrammarAction($left, $right); }
+	| expression[left] MUL expression[right]												{ $$ = MultiplicationExpressionGrammarAction($left, $right); }
+	| expression[left] DIV expression[right]												{ $$ = DivisionExpressionGrammarAction($left, $right); }
+	| factor																				{ $$ = FactorExpressionGrammarAction($1); }
 	;
 
-factor: openPar expression closePar									{ $$ = ExpressionFactorGrammarAction($2); }
-	| constant														{ $$ = ConstantFactorGrammarAction($1); }
+factor: OPEN_PARENTHESIS expression CLOSE_PARENTHESIS										{ $$ = ExpressionFactorGrammarAction($2); }
+	| constant																				{ $$ = ConstantFactorGrammarAction($1); }
 	;
 
-constant: INTEGER													{ $$ = IntegerConstantGrammarAction($1); }
+constant: INTEGER																			{ $$ = IntegerConstantGrammarAction($1); }
 	;
 
-boolVal: TRUEE
-	| FALSEE
+comment: COMMENT																			{ $$ = CommentGrammarAction($1); }
 	;
 
-openBra: OPEN_BRACKET
-	;
-
-closeBra: CLOSE_BRACKET
-	;
-
-openPar: OPEN_PARENTHESIS
-	;
-
-closePar: CLOSE_PARENTHESIS
-	;
-
-semiColon: SEMI_COLON
-	;
-
-comment: COMMENT
-	;
-
-methods: MAX
-	| MIN
-	| AVG
-	| DELETE
+methods: MAX																				{ $$ = MaxGrammarAction(); }
+	| MIN																					{ $$ = MinGrammarAction(); }
+	| AVG																					{ $$ = AvgGrammarAction(); }
+	| DELETE																				{ $$ = DeleteGrammarAction(); }
 	;
 
 %%

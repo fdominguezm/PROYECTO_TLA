@@ -12,7 +12,7 @@
  */
 
 // Programa.
-int ProgramGrammarAction(const int value);
+tProgram * ProgramGrammarAction(tClassSection * classSection, tCodeSection *codeSection);
 
 // Expresión.
 int AdditionExpressionGrammarAction(const int leftValue, const int rightValue);
@@ -30,55 +30,88 @@ int IntegerConstantGrammarAction(const int value);
 
 int CapitalizedWordGrammarAction(); 
 
-int AlphanumericWordGrammarAction(); 
-
-int ClassDefinitionsGrammarAction();
-
 int IntegerGrammarAction();
 
 int StringGrammarAction();
 
 int BooleanGrammarAction();
 
-int GreaterThanGrammarAction(); 
 
-int LessThanGrammarAction(); 
 
-int OpenBracketGrammarAction(); 
+tClassSection * ClassListGrammarAction(tClassList *classList);
 
-int CloseBracketGrammarAction();
 
-int DotGrammarAction(); 
+tClassList * ClassDeclarationGrammarAction(tClassDeclaration *classDeclaration);
+tClassList * MultipleClassDeclarationGrammarAction(tClassDeclaration *classDeclaration,tClassList* next);
 
-int SemicolonGrammarAction(); 
 
-int ReturnKeywordGrammarAction(); 
+tClassDeclaration * VarListGrammarAction(char * className, tVarList *varList);
 
-int NewKeywordGrammarAction();
 
-int IfKeywordGrammarAction(); 
-	
-int WhileKeywordGrammarAction();
+tInstanceAtt * InstanceAttributeGrammarAction(char * instanceName, char * varName);
 
-int ElseKeywordGrammarAction(); 
 
-int TrueKeywordGrammarAction(); 
+tVarList * VarDeclarationGrammarAction(tVarDeclaration *varDec);
+tVarList * MultipleVarDeclarationGrammarAction(tVarDeclaration *varDec,tVarList *next);
 
-int FalseKeywordGrammarAction(); 
 
-int EqualEqualGrammarAction();
+tVarDeclaration * DataTypeVarNameAndVarEqualsGrammarAction(char * dataType, char * varName, tVarEquals *varEquals);
+tVarDeclaration * VarNameParamListGrammarAction(char * className,char * varName,tParamList * paramList);
+tVarDeclaration * DataTypeAndVarNameGrammarAction(char * dataType, char * varName);
 
-int EqualGrammarAction();
 
-int CommaGrammarAction();
+tDataValue * TrueGrammarAction();
+tDataValue * FalseGrammarAction();
+tDataValue * StringValueGrammarAction(char * value);
+tDataValue * IntegerValueGrammarAction(int value);
 
-int MaxValueGrammarAction();
+tVarEquals * VarEqDataValueGrammarAction(tDataValue * dataVal);
+tVarEquals VarEqInstanceAttributeGrammarAction(tInstanceAtt instanceAtt);
+tVarEquals * VarEqVarNameGrammarAction(char * varName);
+tVarEquals VarEqClassMethodGrammarAction(tClassMethod classMethod); 
 
-int MinValueGrammarAction();
+textNode * TypeGrammarAction(char * type);
 
-int AverageValueGrammarAction();
+tCodeSection * CodeListGrammarAction(tCodeList * codeList);
 
-int DeleteGrammarAction(); 
+tCodeList * CodeComponentsGrammarAction(tCodeComponents * codeComponent);
+tCodeList * MultipleCodeComponentsGrammarAction(tCodeComponents * codeComponent,tCodeList * next);
 
+
+tCodeComponents * IfGrammarAction(tIfStatement * ifStatement);
+tCodeComponents * WhileGrammarAction(tWhileStatement * whileStatement);
+tCodeComponents * CodeVarDeclarationGrammarAction(tVarDeclaration *varDec);
+tCodeComponents * VarNameEqualsVarGrammarAction(char * name, tVarEquals * varEq);
+tCodeComponents * InstanceAttributeEqualGrammarAction(tInstanceAtt * instanceAtt, tVarEquals *varEq);
+tCodeComponents * ClassMethodGrammarAction(tClassMethod * classMethod);
+tCodeComponents * CommentCodeGrammarAction(char * comment);
+
+
+tIfStatement * IfInitializedGrammarAction(tLogicalExpression * logExp, tCodeList * codeList, tElseStatement *else);
+
+
+tElseStatement * EmptyGrammarAction();
+tElseStatement * ElseIfGrammarAction(tIfStatement * ifStatement);
+tElseStatement * ElseCodeListGrammarAction(tCodeList *codeList);
+
+
+tWhileStatement * WhileInitializedGrammarAction(tLogicalExpression * logExp, tCodeList * codeList);
+
+
+tLogicalExpression * MultipleLogicalExpressionGrammarAction(tLogicalExpression * left, char * logConnector, tLogicalExpression * right );
+tLogicalExpression * VarNameLogicalExpressionGrammarAction(char * varName);
+tLogicalExpression * InstanceAttLogicalExpressionGrammarAction(tInstanceAtt * instanceAtt);
+tLogicalExpression * DataValueLogicalExpressionGrammarAction(tDataValue * value); 
+tLogicalExpression * ExpressionLogicalExpressionGrammarAction(tExpression *exp);
+
+tParamList * ParamListGrammarAction(tDataValue * value);
+tParamList * MultipleParamListGrammarAction(tDataValue * dataVal, tParamList * paramList);
+
+
+tClassMethod * MethodsAndVarNameGrammarAction(char * className, char * method, char * varName);
+tClassMethod * DeleteGrammarAction();
+tClassMethod * AvgGrammarAction();
+tClassMethod * MinGrammarAction();
+tClassMethod * MaxGrammarAction();
 
 #endif
