@@ -173,6 +173,7 @@ tVarList * VarDeclarationGrammarAction(tVarDeclaration * varDec){
 		return NULL;
 	}
 	res->varDeclaration = varDec;
+	res->type = SINGLE_VAR_DECLARATION;
 	return res;
 }
 
@@ -183,7 +184,8 @@ tVarList * MultipleVarDeclarationGrammarAction(tVarDeclaration * varDec,tVarList
 		return NULL;
 	}
 	res->varDeclaration = varDec;
-	res->next =next;
+	res->next = next;
+	res->type = MULTIPLE_VAR_DECLARATION;
 	return res;
 }
 
@@ -232,12 +234,16 @@ tVarDeclaration * DataTypeAndVarNameGrammarAction(char * dataType, char * varNam
 tDataValue * TrueGrammarAction(){
 	LogDebug("\tTrueGrammarAction()");
 	tDataValue * res = calloc(BLOCK, sizeof(tDataValue));
+	res->boolVal = true;
+	res->type = BOOLEAN_VALUE;
 	return res;
 }
 
 tDataValue * FalseGrammarAction(){
 	LogDebug("\tFalseGrammarAction()");
 	tDataValue * res = calloc(BLOCK, sizeof(tDataValue));
+	res->boolVal = false;
+	res->type = BOOLEAN_VALUE;
 	return res;
 }
 
@@ -248,6 +254,7 @@ tDataValue * StringValueGrammarAction(char * value){
 		return NULL;
 	}
 	res->stringVal = value;
+	res->type = STRING_VALUE;
 	return res;
 }
 
@@ -258,6 +265,7 @@ tDataValue * IntegerValueGrammarAction(int value){
 		return NULL;
 	}
 	res->integerVal = value;
+	res->type = INTEGER_VALUE;
 	return res;
 }
 
@@ -474,14 +482,8 @@ tCodeComponents * IfGrammarAction(tIfStatement * ifStatement) {
 	if (res == NULL) {
 		return NULL;
 	}
-	res->whileStatement = NULL;
+	res->type = IF_COMPONENT;
 	res->ifStatement = ifStatement;
-	res->varDeclaration = NULL;
-	res->varName = NULL;
-	res->instanceAtt = NULL;
-	res->classMethod = NULL;
-	res->comment = NULL;
-	res->varEq = NULL;
 	return res;
 }
 tCodeComponents * WhileGrammarAction(tWhileStatement * whileStatement) {
@@ -491,13 +493,7 @@ tCodeComponents * WhileGrammarAction(tWhileStatement * whileStatement) {
 		return NULL;
 	}
 	res->whileStatement = whileStatement;
-	res->ifStatement = NULL;
-	res->varDeclaration = NULL;
-	res->varName = NULL;
-	res->instanceAtt = NULL;
-	res->classMethod = NULL;
-	res->comment = NULL;
-	res->varEq = NULL;
+	res->type = WHILE_COMPONENT;
 	return res;
 }
 tCodeComponents * CodeVarDeclarationGrammarAction(tVarDeclaration * varDec) {
@@ -506,14 +502,8 @@ tCodeComponents * CodeVarDeclarationGrammarAction(tVarDeclaration * varDec) {
 	if (res == NULL) {
 		return NULL;
 	}
-	res->whileStatement = NULL;
-	res->ifStatement = NULL;
+	res->type = VAR_DECLARATION_COMPONENT;
 	res->varDeclaration = varDec;
-	res->varName = NULL;
-	res->instanceAtt = NULL;
-	res->classMethod = NULL;
-	res->comment = NULL;
-	res->varEq = NULL;
 	return res;
 }
 tCodeComponents * VarNameEqualsVarGrammarAction(char * name, tVarEquals * varEq) {
@@ -522,13 +512,8 @@ tCodeComponents * VarNameEqualsVarGrammarAction(char * name, tVarEquals * varEq)
 	if (res == NULL) {
 		return NULL;
 	}
-	res->whileStatement = NULL;
-	res->ifStatement = NULL;
-	res->varDeclaration = NULL;
+	res->type = VAR_EQUALS_COMPONENT;
 	res->varName = name;
-	res->instanceAtt = NULL;
-	res->classMethod = NULL;
-	res->comment = NULL;
 	res->varEq = varEq;
 	return res;
 }
@@ -538,13 +523,8 @@ tCodeComponents * InstanceAttributeEqualGrammarAction(tInstanceAtt * instanceAtt
 	if (res == NULL) {
 		return NULL;
 	}
-	res->whileStatement = NULL;
-	res->ifStatement = NULL;
-	res->varDeclaration = NULL;
-	res->varName = NULL;
+	res->type = INSTANCE_ATTRIBUTE_COMPONENT;
 	res->instanceAtt = instanceAtt;
-	res->classMethod = NULL;
-	res->comment = NULL;
 	res->varEq = varEq;
 	return res;
 }
@@ -554,14 +534,8 @@ tCodeComponents * ClassMethodGrammarAction(tClassMethod * classMethod) {
 	if (res == NULL) {
 		return NULL;
 	}
-	res->whileStatement = NULL;
-	res->ifStatement = NULL;
-	res->varDeclaration = NULL;
-	res->varName = NULL;
-	res->instanceAtt = NULL;
+	res->type = CLASS_METHOD_COMPONENT;
 	res->classMethod = classMethod;
-	res->comment = NULL;
-	res->varEq = NULL;
 	return res;
 }
 tCodeComponents * CommentCodeGrammarAction(char * comment) {
@@ -570,14 +544,8 @@ tCodeComponents * CommentCodeGrammarAction(char * comment) {
 	if (res == NULL) {
 		return NULL;
 	}
-	res->whileStatement = NULL;
-	res->ifStatement = NULL;
-	res->varDeclaration = NULL;
-	res->varName = NULL;
-	res->instanceAtt = NULL;
-	res->classMethod = NULL;
+	res->type = COMMENT_COMPONENT;
 	res->comment = comment;
-	res->varEq = NULL;
 	return res;
 }
 

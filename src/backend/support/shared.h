@@ -69,10 +69,16 @@ typedef struct textNode{
 	char * text;
 }textNode;
 
+typedef enum DataValueType {
+	BOOLEAN_VALUE,
+	STRING_VALUE,
+	INTEGER_VALUE
+} DataValueType;
 typedef struct tDataValue{
 	boolean boolVal;
 	char * stringVal;
 	int integerVal;
+	DataValueType type;
 } tDataValue;
 
 
@@ -113,6 +119,15 @@ typedef struct tWhileStatement{
 	struct tCodeList * codeList;
 } tWhileStatement;
 
+typedef enum CodeComponentType {
+	WHILE_COMPONENT,
+	IF_COMPONENT,
+	VAR_DECLARATION_COMPONENT,
+	VAR_EQUALS_COMPONENT,
+	INSTANCE_ATTRIBUTE_COMPONENT,
+	CLASS_METHOD_COMPONENT,
+	COMMENT_COMPONENT
+} CodeComponentType;
 typedef struct tCodeComponents{
 	tWhileStatement * whileStatement;
 	tIfStatement * ifStatement;
@@ -122,6 +137,7 @@ typedef struct tCodeComponents{
 	struct tClassMethod * classMethod;
 	textNode * comment;
 	tVarEquals * varEq;
+	CodeComponentType type;
 } tCodeComponents;
 
 
@@ -159,9 +175,15 @@ typedef struct tVarDeclaration{
 	tParamList * paramList;
 }tVarDeclaration;
 
+typedef enum VarListType {
+	SINGLE_VAR_DECLARATION,
+	MULTIPLE_VAR_DECLARATION
+} VarListType;
+
 typedef struct tVarList{
 	tVarDeclaration * varDeclaration;
 	struct tVarList * next;
+	VarListType type;
 }tVarList;
 
 typedef struct tClassMethod
