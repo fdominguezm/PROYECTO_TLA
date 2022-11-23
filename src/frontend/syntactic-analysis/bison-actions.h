@@ -57,9 +57,9 @@ tVarList * VarDeclarationGrammarAction(tVarDeclaration *varDec);
 tVarList * MultipleVarDeclarationGrammarAction(tVarDeclaration *varDec,tVarList *next);
 
 
-tVarDeclaration * DataTypeVarNameAndVarEqualsGrammarAction(char * dataType, char * varName, tVarEquals *varEquals);
+tVarDeclaration * DataTypeVarNameAndVarEqualsGrammarAction(textNode * dataType, char * varName, tVarEquals *varEquals);
 tVarDeclaration * VarNameParamListGrammarAction(char * className,char * varName,tParamList * paramList);
-tVarDeclaration * DataTypeAndVarNameGrammarAction(char * dataType, char * varName);
+tVarDeclaration * DataTypeAndVarNameGrammarAction(textNode * dataType, char * varName);
 
 
 tDataValue * TrueGrammarAction();
@@ -105,16 +105,17 @@ tLogicalExpression * MultipleLogicalExpressionGrammarAction(tLogicalExpression *
 tLogicalExpression * VarNameLogicalExpressionGrammarAction(char * varName);
 tLogicalExpression * InstanceAttLogicalExpressionGrammarAction(tInstanceAtt * instanceAtt);
 tLogicalExpression * DataValueLogicalExpressionGrammarAction(tDataValue * value); 
-tLogicalExpression * ExpressionLogicalExpressionGrammarAction(tExpression *exp);
+tLogicalExpression * ExpressionLogicalExpressionGrammarAction(int expression);
 
 tParamList * ParamListGrammarAction(tDataValue * value);
 tParamList * MultipleParamListGrammarAction(tDataValue * dataVal, tParamList * paramList);
 
 
-tClassMethod * MethodsAndVarNameGrammarAction(char * className, char * method, char * varName);
-tClassMethod * DeleteGrammarAction();
-tClassMethod * AvgGrammarAction();
-tClassMethod * MinGrammarAction();
-tClassMethod * MaxGrammarAction();
+tClassMethod * MethodsAndVarNameGrammarAction(char * className, MethodType method, char * varName);
+
+MethodType DeleteGrammarAction();
+MethodType AvgGrammarAction();
+MethodType MinGrammarAction();
+MethodType MaxGrammarAction();
 
 #endif

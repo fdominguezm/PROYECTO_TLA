@@ -1,0 +1,3 @@
+int b = 7;
+bool a = true;
+string text = hola;

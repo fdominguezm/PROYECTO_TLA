@@ -1,0 +1,3 @@
+int num = 5
+int num = 6;
+string = "hola";

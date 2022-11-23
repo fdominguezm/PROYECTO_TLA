@@ -1,0 +1,19 @@
+CLASSES {
+    Celular {
+        string marca;
+        int precio;
+        int anio;
+        string numero;
+        bool habilitado;
+    }
+}
+
+Celular cel1 = new Celular("Nokia", 1000, 2020, "1234-5678", true);
+Celular cel2 = new Celular("Motorola", 2000, 2015, "8765-4321", false);
+Celular cel3 = new Celular("Apple", 3000, 2012, "5678-1234", true);
+Celular cel4 = new Celular("Samsung", 4000, 2005, "1234-4321", false);
+
+int minAnio = Celular.MIN(anio);
+
+// minAnio = 2005;
+  

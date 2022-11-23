@@ -1,0 +1,7 @@
+CLASSES{
+    Auto{
+        int anio ;
+    }
+}
+
+Auto.AVG("modelo");

@@ -154,7 +154,7 @@ tInstanceAtt * InstanceAttributeGrammarAction(char * instanceName, char * varNam
 	return res;
 }
 
-tClassMethod * MethodsAndVarNameGrammarAction(char * className, char *  method, char * arguments){
+tClassMethod * MethodsAndVarNameGrammarAction(char * className, MethodType  method, char * arguments){
 	LogDebug("\tMethodsAndVarNameGrammarAction()");
 	tClassMethod * res = (tClassMethod *) calloc(BLOCK, sizeof(tClassMethod));
 	if (res == NULL) {
@@ -189,17 +189,16 @@ tVarList * MultipleVarDeclarationGrammarAction(tVarDeclaration * varDec,tVarList
 	return res;
 }
 
-tVarDeclaration * DataTypeVarNameAndVarEqualsGrammarAction(char * dataType, char * varName, tVarEquals * varEquals){
+tVarDeclaration * DataTypeVarNameAndVarEqualsGrammarAction(textNode * dataType, char * varName, tVarEquals * varEquals){
 	LogDebug("\tDataTypeVarNameAndVarEqualsGrammarAction()");
 	tVarDeclaration * res = calloc(BLOCK, sizeof(tVarDeclaration));
 	if (res == NULL) {
 		return NULL;
 	}
 	res->dataType = dataType;
-	res->paramList = NULL;
 	res->varName = varName;
 	res->varEq = varEquals;
-	res->className = NULL;
+	res->type = VARDEC_DATATYPE_VARNAME_VAREQ;
 	return res;
 }
 
@@ -212,8 +211,7 @@ tVarDeclaration * VarNameParamListGrammarAction(char * className, char * varName
 	res->className = className;
 	res->paramList = paramList;
 	res->varName = varName;
-	res->varEq = NULL;
-	res->dataType = NULL;
+	res->type = VARDEC_CLASSNAME_VARNAME_PARAMLIST;
 	return res;
 }
 
@@ -225,9 +223,7 @@ tVarDeclaration * DataTypeAndVarNameGrammarAction(textNode * dataType, char * va
 	}
 	res->varName = varName;
 	res->dataType = dataType;
-	res->paramList = NULL;
-	res->className = NULL;
-	res->varEq = NULL;
+	res->type = VARDEC_VARNAME_DATATYPE;
 	return res;
 }
 
@@ -235,7 +231,7 @@ tDataValue * TrueGrammarAction(){
 	LogDebug("\tTrueGrammarAction()");
 	tDataValue * res = calloc(BLOCK, sizeof(tDataValue));
 	res->boolVal = true;
-	res->type = BOOLEAN_VALUE;
+	res->type = BOOLEAN_VAL;
 	return res;
 }
 
@@ -243,7 +239,7 @@ tDataValue * FalseGrammarAction(){
 	LogDebug("\tFalseGrammarAction()");
 	tDataValue * res = calloc(BLOCK, sizeof(tDataValue));
 	res->boolVal = false;
-	res->type = BOOLEAN_VALUE;
+	res->type = BOOLEAN_VAL;
 	return res;
 }
 
@@ -254,7 +250,7 @@ tDataValue * StringValueGrammarAction(char * value){
 		return NULL;
 	}
 	res->stringVal = value;
-	res->type = STRING_VALUE;
+	res->type = STRING_VAL;
 	return res;
 }
 
@@ -265,7 +261,7 @@ tDataValue * IntegerValueGrammarAction(int value){
 		return NULL;
 	}
 	res->integerVal = value;
-	res->type = INTEGER_VALUE;
+	res->type = INTEGER_VAL;
 	return res;
 }
 
@@ -279,42 +275,6 @@ tVarEquals * VarEqDataValueGrammarAction(tDataValue * dataVal){
 	return res;
 }
 
-tClassMethod * DeleteGrammarAction(){
-	LogDebug("\tDeleteGrammarAction()");
-	tClassMethod * res = calloc(BLOCK, sizeof(tClassMethod));
-	if (res == NULL) {
-		return NULL;
-	}
-	return res;
-}
-
-tClassMethod * AvgGrammarAction(){
-	LogDebug("\tAvgGrammarAction()");
-	tClassMethod * res = calloc(BLOCK, sizeof(tClassMethod));
-	if (res == NULL) {
-		return NULL;
-	}
-	return res;
-}
-
-tClassMethod * MinGrammarAction(){
-	LogDebug("\tMinGrammarAction()");
-	tClassMethod * res = calloc(BLOCK, sizeof(tClassMethod));
-	if (res == NULL) {
-		return NULL;
-	}
-	return res;
-}
-
-tClassMethod * MaxGrammarAction(){
-	LogDebug("\tMaxGrammarAction()");
-	tClassMethod * res = calloc(BLOCK, sizeof(tClassMethod));
-	if (res == NULL) {
-		return NULL;
-	}
-	return res;
-}
-
 tLogicalExpression * MultipleLogicalExpressionGrammarAction(tLogicalExpression * left, char * logConnector, tLogicalExpression * right ){
 	LogDebug("\tMultipleLogicalExpressionGrammarAction()");
 	tLogicalExpression * res = calloc(BLOCK, sizeof(tLogicalExpression));
@@ -324,10 +284,7 @@ tLogicalExpression * MultipleLogicalExpressionGrammarAction(tLogicalExpression *
 	res->left = left;
 	res->right = right;
 	res->logicalConnector = logConnector;
-	res->dataValue = NULL;
-	res->expression = NULL;
-	res->instanceAtt = NULL;
-	res->varName = NULL;
+	res->type = MULTIPLE_LOGEX;
 
 	return res;
 }
@@ -340,12 +297,7 @@ tLogicalExpression * VarNameLogicalExpressionGrammarAction(char * varName){
 	} 
 
 	res->varName = varName;
-	res->left = NULL;
-	res->right = NULL;
-	res->logicalConnector = NULL;
-	res->dataValue = NULL;
-	res->expression = NULL;
-	res->instanceAtt = NULL;
+	res->type = VAR_NAME_LOGEX;
 
 	return res;
 }
@@ -356,15 +308,8 @@ tLogicalExpression * InstanceAttLogicalExpressionGrammarAction(tInstanceAtt * in
 	if (res == NULL) {
 		return NULL;
 	} 
-
-	res->varName = NULL;
-	res->left = NULL;
-	res->right = NULL;
-	res->logicalConnector = NULL;
-	res->dataValue = NULL;
-	res->expression = NULL;
 	res->instanceAtt = instanceAtt;
-
+	INSTANCE_ATT_LOGEX;
 	return res;
 }
 tLogicalExpression * DataValueLogicalExpressionGrammarAction(tDataValue * value){
@@ -374,32 +319,19 @@ tLogicalExpression * DataValueLogicalExpressionGrammarAction(tDataValue * value)
 	if (res == NULL) {
 		return NULL;
 	} 
-
-	res->varName = NULL;
-	res->left = NULL;
-	res->right = NULL;
-	res->logicalConnector = NULL;
 	res->dataValue = value;
-	res->expression = NULL;
-	res->instanceAtt = NULL;
-
+	res->type = DATA_VAL_LOGEX;
 	return res;
 }
-tLogicalExpression * ExpressionLogicalExpressionGrammarAction(tExpression *exp){
+tLogicalExpression * ExpressionLogicalExpressionGrammarAction(int expression){
 	LogDebug("\tExpressionLogicalExpressionGrammarAction()");
 
 	tLogicalExpression * res = calloc(BLOCK, sizeof(tLogicalExpression));
 	if (res == NULL) {
 		return NULL;
 	} 
-
-	res->varName = NULL;
-	res->left = NULL;
-	res->right = NULL;
-	res->logicalConnector = NULL;
-	res->dataValue = NULL;
-	res->expression = exp;
-	res->instanceAtt = NULL;
+	res->expression = expression;
+	res->type = EXP_LOGEX;
 
 	return res;
 }
@@ -420,7 +352,7 @@ tParamList * ParamListGrammarAction(tDataValue * value){
 
 
 tParamList * MultipleParamListGrammarAction(tDataValue * dataVal, tParamList * paramList){
-	LogDebug("\tExpressionLogicalExpressionGrammarAction()");
+	LogDebug("\tMultipleParamListGrammarAction()");
 
 	tParamList * res = calloc(BLOCK, sizeof(tParamList));
 	if (res == NULL) {
@@ -565,7 +497,11 @@ tIfStatement * IfInitializedGrammarAction(tLogicalExpression * logExp, tCodeList
 
 tElseStatement * EmptyGrammarAction(){
 	LogDebug("\tEmptyGrammarAction()");
-
+	tElseStatement * res = calloc(BLOCK, sizeof(tElseStatement));
+	if (res == NULL) {
+		return NULL;
+	}
+	res->type = ELSE_EMPTY;
 	return NULL;
 }
 tElseStatement * ElseIfGrammarAction(tIfStatement * ifStatement) {
@@ -575,7 +511,7 @@ tElseStatement * ElseIfGrammarAction(tIfStatement * ifStatement) {
 		return NULL;
 	}
 	res->ifStatement = ifStatement;
-	res->codeList = NULL;
+	res->type = ELSE_IF;
 	return res;
 }
 tElseStatement * ElseCodeListGrammarAction(tCodeList * codeList){
@@ -585,7 +521,7 @@ tElseStatement * ElseCodeListGrammarAction(tCodeList * codeList){
 		return NULL;
 	}
 	res->codeList = codeList;
-	res->ifStatement = NULL;
+	res->type = ELSE_CODE_LIST;
 	return res;	
 }
 
@@ -602,6 +538,7 @@ tWhileStatement * WhileInitializedGrammarAction(tLogicalExpression * logExp, tCo
 }
 
 
+
 tVarEquals * VarEqInstanceAttributeGrammarAction(tInstanceAtt *instanceAtt){
 	LogDebug("\tVarEqInstanceAttributeGrammarAction()");
 	tVarEquals * res = calloc(BLOCK, sizeof(tVarEquals));
@@ -609,9 +546,7 @@ tVarEquals * VarEqInstanceAttributeGrammarAction(tInstanceAtt *instanceAtt){
 		return NULL;
 	}
 	res->instanceAtt = instanceAtt;
-	res->method = NULL;
-	res->name = NULL;
-	res->val = NULL;
+	res->type = VAREQ_INSTANCE_ATT;
 	return res;			
 }
 
@@ -621,10 +556,8 @@ tVarEquals * VarEqVarNameGrammarAction(char * varName){
 	if (res == NULL) {
 		return NULL;
 	}
-	res->instanceAtt = NULL;
-	res->method = NULL;
 	res->name = varName;
-	res->val = NULL;
+	res->type = VAREQ_VAR_NAME;
 	return res;		
 }
 tVarEquals *VarEqClassMethodGrammarAction(tClassMethod *classMethod){
@@ -633,10 +566,20 @@ tVarEquals *VarEqClassMethodGrammarAction(tClassMethod *classMethod){
 	if (res == NULL) {
 		return NULL;
 	}
-	res->instanceAtt = NULL;
 	res->method = classMethod;
-	res->name = NULL;
-	res->val = NULL;
+	res->type = VAREQ_CLASS_METHOD;
 	return res;	
 }
 
+MethodType DeleteGrammarAction() {
+	return DELETE_METHOD;
+}
+MethodType AvgGrammarAction() {
+	return AVG_METHOD;
+}
+MethodType MinGrammarAction() {
+	return MIN_METHOD;
+}
+MethodType MaxGrammarAction() {
+	return MAX_METHOD;
+}

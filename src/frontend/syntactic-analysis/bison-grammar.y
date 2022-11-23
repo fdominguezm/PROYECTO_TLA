@@ -42,15 +42,11 @@
 	tParamList *paramList;
 
 	tLogicalExpression *logicalExpression;
-	tExpression *expression;
-	Factor *factor;
+	int expression;
+	int factor;
 	int constant;
 
-	tCodeComponents *comment;
-
-	char * methods;
-
-	tMethods * methods;
+	MethodType method;
 
 	// Terminales.
 	int token;
@@ -66,14 +62,14 @@
 %token <token> MUL
 %token <token> DIV
 
-%token <token> EQ
+%token <stringToken> EQ
 
-%token <token> EQEQ
-%token <token> GT
-%token <token> LT
-%token <token> GTEQ
-%token <token> LTEQ
-%token <token> NOTEQ
+%token <stringToken> EQEQ
+%token <stringToken> GT
+%token <stringToken> LT
+%token <stringToken> GTEQ
+%token <stringToken> LTEQ
+%token <stringToken> NOTEQ
 
 %token <stringToken> OPEN_PARENTHESIS
 %token <stringToken> CLOSE_PARENTHESIS
@@ -92,10 +88,10 @@
 %token <stringToken> STRING
 %token <stringToken> BOOLEAN
 %token <token> INTEGER_VALUE
-%token <token> STRING_VALUE
+%token <stringToken> STRING_VALUE
 
 %token <className> CAPITALIZED_NAME
-%token <token> ALPHANUMERIC_NAME
+%token <stringToken> ALPHANUMERIC_NAME
 
 %token <stringToken> IF
 %token <stringToken> ELSE
@@ -135,6 +131,9 @@
 %type <logicalExpression> logicalExpression
 %type <classMethod> classMethod
 %type <dataValue> dataValue
+%type <method> method
+%type <codeList> codeList
+
 
 
 // Reglas de asociatividad y precedencia (de menor a mayor).
@@ -164,7 +163,7 @@ classDeclaration: CAPITALIZED_NAME OPEN_BRACKET varList CLOSE_BRACKET								{ $
 instanceAttribute: ALPHANUMERIC_NAME DOT ALPHANUMERIC_NAME														{ $$ = InstanceAttributeGrammarAction($1,$3);}
 	;
 
-classMethod: CAPITALIZED_NAME DOT methods OPEN_PARENTHESIS ALPHANUMERIC_NAME CLOSE_PARENTHESIS				{ $$ = MethodsAndVarNameGrammarAction($1,$3,$5);}
+classMethod: CAPITALIZED_NAME DOT method OPEN_PARENTHESIS ALPHANUMERIC_NAME CLOSE_PARENTHESIS				{ $$ = MethodsAndVarNameGrammarAction($1,$3,$5);}
 	;
 
 varList: varDeclaration 																	{ $$ = VarDeclarationGrammarAction($1); }
@@ -173,7 +172,7 @@ varList: varDeclaration 																	{ $$ = VarDeclarationGrammarAction($1);
 
 varDeclaration: dataType ALPHANUMERIC_NAME SEMI_COLON 															{ $$ = DataTypeAndVarNameGrammarAction($1,$2);}
 	| dataType ALPHANUMERIC_NAME varEquals SEMI_COLON															{ $$ = DataTypeVarNameAndVarEqualsGrammarAction($1,$2,$3);}
-	| CAPITALIZED_NAME ALPHANUMERIC_NAME EQ NEW CAPITALIZED_NAME OPEN_PARENTHESIS paramList CLOSE_PARENTHESIS SEMI_COLON;	{ $$ = VarNameParamListGrammarAction($1,$2,$7);}
+	| CAPITALIZED_NAME ALPHANUMERIC_NAME EQ NEW CAPITALIZED_NAME OPEN_PARENTHESIS paramList CLOSE_PARENTHESIS SEMI_COLON	{ $$ = VarNameParamListGrammarAction($1,$2,$7);}
 	;
 
 dataValue: TRUEE																			{ $$ = TrueGrammarAction(); }
@@ -207,13 +206,13 @@ codeList: codeComponents 																	{ $$ = CodeComponentsGrammarAction($1)
 codeComponents: ifStatement 																{ $$ = IfGrammarAction($1); }
 	| whileStatement 																		{ $$ = WhileGrammarAction($1); }
 	| varDeclaration 																		{ $$ = CodeVarDeclarationGrammarAction($1); }
-	| ALPHANUMERIC_NAME varEquals SEMI_COLON 												{ $$ = VarNameEqualsVarGrammarAction($1);}
+	| ALPHANUMERIC_NAME varEquals SEMI_COLON 												{ $$ = VarNameEqualsVarGrammarAction($1,$2);}
 	| instanceAttribute varEquals SEMI_COLON												{ $$ = InstanceAttributeEqualGrammarAction($1,$2);}
 	| classMethod SEMI_COLON																{ $$ = ClassMethodGrammarAction($1); }
-	| comment																				{ $$ = CommentCodeGrammarAction($1); }
+	| COMMENT																				{ $$ = CommentCodeGrammarAction($1); }
 	;
 
-ifStatement: IF logicalExpression OPEN_BRACKET codeList CLOSE_BRACKET elseStatement			{$$ = IfInitializedGrammarAction($2, $4, $5);}
+ifStatement: IF logicalExpression OPEN_BRACKET codeList CLOSE_BRACKET elseStatement			{$$ = IfInitializedGrammarAction($2, $4, $6);}
 	;
 	
 elseStatement: %empty 																		{ $$ = EmptyGrammarAction();}
@@ -250,13 +249,10 @@ factor: OPEN_PARENTHESIS expression CLOSE_PARENTHESIS										{ $$ = Expression
 	| constant																				{ $$ = ConstantFactorGrammarAction($1); }
 	;
 
-constant: INTEGER																			{ $$ = IntegerConstantGrammarAction($1); }
+constant: INTEGER_VALUE																			{ $$ = IntegerConstantGrammarAction($1); }
 	;
 
-comment: COMMENT																			{ $$ = CommentGrammarAction($1); }
-	;
-
-methods: MAX																				{ $$ = MaxGrammarAction(); }
+method: MAX																				{ $$ = MaxGrammarAction(); }
 	| MIN																					{ $$ = MinGrammarAction(); }
 	| AVG																					{ $$ = AvgGrammarAction(); }
 	| DELETE																				{ $$ = DeleteGrammarAction(); }

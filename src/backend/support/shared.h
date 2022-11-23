@@ -70,10 +70,11 @@ typedef struct textNode{
 }textNode;
 
 typedef enum DataValueType {
-	BOOLEAN_VALUE,
-	STRING_VALUE,
-	INTEGER_VALUE
+	BOOLEAN_VAL,
+	STRING_VAL,
+	INTEGER_VAL
 } DataValueType;
+
 typedef struct tDataValue{
 	boolean boolVal;
 	char * stringVal;
@@ -81,12 +82,18 @@ typedef struct tDataValue{
 	DataValueType type;
 } tDataValue;
 
+typedef enum VarEqualsType {
+	VAREQ_INSTANCE_ATT,
+	VAREQ_VAR_NAME,
+	VAREQ_CLASS_METHOD
+} VarEqualsType;
 
 typedef struct tVarEquals{
 	tDataValue * val;
 	struct tInstanceAtt * instanceAtt;
 	char * name;
 	struct tClassMethod * method;
+	VarEqualsType type;
 } tVarEquals;
 
 typedef struct tInstanceAtt
@@ -96,6 +103,15 @@ typedef struct tInstanceAtt
 	tVarEquals * varEq;
 }tInstanceAtt;
 
+typedef enum LogicalExpresionType{
+	MULTIPLE_LOGEX,
+	VAR_NAME_LOGEX,
+	INSTANCE_ATT_LOGEX,
+	DATA_VAL_LOGEX,
+	EXP_LOGEX
+
+}LogExType;
+
 typedef struct tLogicalExpression{
 	struct tLogicalExpression * right;
 	struct tLogicalExpression * left;
@@ -103,7 +119,8 @@ typedef struct tLogicalExpression{
 	char * varName;
 	tInstanceAtt * instanceAtt;
 	tDataValue * dataValue;
-	tExpression * expression;
+	int expression;
+	LogExType type;
 }tLogicalExpression;
 
 
@@ -146,10 +163,16 @@ typedef struct tCodeList{
 	struct tCodeList * next;
 } tCodeList;
 
+typedef enum ElseStatementType {
+	ELSE_EMPTY,
+	ELSE_CODE_LIST,
+	ELSE_IF
+}ElseStatementType;
 
 typedef struct tElseStatement{
 	tIfStatement * ifStatement;
 	tCodeList * codeList;
+	ElseStatementType type;
 } tElseStatement;
 
 typedef struct tCodeSection{
@@ -167,12 +190,19 @@ typedef struct tParamList{
 	struct tParamList * next;
 } tParamList;
 
+typedef enum VarDeclarationType {
+	VARDEC_DATATYPE_VARNAME_VAREQ,
+	VARDEC_CLASSNAME_VARNAME_PARAMLIST,
+	VARDEC_VARNAME_DATATYPE
+}VarDeclarationType;
+
 typedef struct tVarDeclaration{
 	textNode * dataType;
 	char * varName;
 	char * className;
-	tVarEquals *varEq;
+	tVarEquals * varEq;
 	tParamList * paramList;
+	VarDeclarationType type;
 }tVarDeclaration;
 
 typedef enum VarListType {
@@ -186,10 +216,18 @@ typedef struct tVarList{
 	VarListType type;
 }tVarList;
 
+
+typedef enum MethodType {
+	MAX_METHOD,
+	MIN_METHOD,
+	AVG_METHOD,
+	DELETE_METHOD
+} MethodType;
+
 typedef struct tClassMethod
 {
 	char * className;
-	char * method;
+	MethodType method;
 	char * arguments;
 }tClassMethod;
 
