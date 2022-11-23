@@ -3,6 +3,8 @@
 
 #include "../../backend/support/shared.h"
 #include "../../backend/semantic-analysis/abstract-syntax-tree.h"
+#include <stdio.h>
+#include <stdlib.h>
 
 /**
  * Se definen las acciones a ejecutar sobre cada regla de producción de la
@@ -12,7 +14,7 @@
  */
 
 // Programa.
-tProgram * ProgramGrammarAction(tClassSection * classSection, tCodeSection *codeSection);
+tProgram * ProgramGrammarAction(tClassSection * claSection, tCodeSection *codeSection);
 
 // Expresión.
 int AdditionExpressionGrammarAction(const int leftValue, const int rightValue);
@@ -87,7 +89,7 @@ tCodeComponents * ClassMethodGrammarAction(tClassMethod * classMethod);
 tCodeComponents * CommentCodeGrammarAction(char * comment);
 
 
-tIfStatement * IfInitializedGrammarAction(tLogicalExpression * logExp, tCodeList * codeList, tElseStatement *else);
+tIfStatement * IfInitializedGrammarAction(tLogicalExpression * logExp, tCodeList * codeList, tElseStatement * elseStatement);
 
 
 tElseStatement * EmptyGrammarAction();

@@ -78,9 +78,9 @@ typedef struct tDataValue{
 
 typedef struct tVarEquals{
 	tDataValue * val;
-	tInstanceAtt * instanceAtt;
+	struct tInstanceAtt * instanceAtt;
 	char * name;
-	tClassMethod * method;
+	struct tClassMethod * method;
 } tVarEquals;
 
 typedef struct tInstanceAtt
@@ -103,23 +103,23 @@ typedef struct tLogicalExpression{
 
 typedef struct tIfStatement{
 	tLogicalExpression * logicalExpression;
-	tCodeList * codeList;
-	tElseStatement * elseStatement;
+	struct tCodeList * codeList;
+	struct tElseStatement * elseStatement;
 } tIfStatement;
 
 
 typedef struct tWhileStatement{
 	tLogicalExpression * logicalExpression;
-	tCodeList * codeList;
+	struct tCodeList * codeList;
 } tWhileStatement;
 
 typedef struct tCodeComponents{
-	 tWhileStatement * whileStatement;
-	 tIfStatement * ifStatement;
-	 tVarDeclaration * varDeclaration;
+	tWhileStatement * whileStatement;
+	tIfStatement * ifStatement;
+	struct tVarDeclaration * varDeclaration;
 	char * varName;
 	tInstanceAtt * instanceAtt;
-	 tClassMethod * classMethod;
+	struct tClassMethod * classMethod;
 	textNode * comment;
 	tVarEquals * varEq;
 } tCodeComponents;
@@ -152,7 +152,7 @@ typedef struct tParamList{
 } tParamList;
 
 typedef struct tVarDeclaration{
-	textNode * dataType;
+	char * dataType;
 	char * varName;
 	char * className;
 	tVarEquals *varEq;
@@ -201,7 +201,7 @@ typedef struct {
 	boolean succeed;
 
 	// Indica el resultado de la compilación (para la calculadora).
-	int result;
+	tProgram * result;
 
 	// El nodo raíz del AST (se usará cuando se implemente el backend).
 	tProgram * program;

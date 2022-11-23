@@ -3,6 +3,7 @@
 #include "bison-actions.h"
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
 #define BLOCK	1
 
 /**
@@ -29,14 +30,14 @@ void yyerror(const char * string) {
 * indica que efectivamente el programa de entrada se pudo generar con esta
 * gramática, o lo que es lo mismo, que el programa pertenece al lenguaje.
 */
-tProgram * ProgramGrammarAction(tClassSection * classSection, tCodeSection* codeSection) {
+tProgram * ProgramGrammarAction(tClassSection * claSection, tCodeSection * codeSection) {
 	LogDebug("Reconozco patrón. ProgramGrammarAction()");
 	tProgram * value = calloc(BLOCK, sizeof(tProgram));
 	if (value == NULL)
 	{
 		return value;
 	}
-	value->classSection = classSection;
+	value->classSection = claSection;
 	value->codeSection = codeSection;
 	
 	/*
@@ -184,7 +185,7 @@ tVarList * MultipleVarDeclarationGrammarAction(tVarDeclaration * varDec,tVarList
 	return res;
 }
 
-tVarDeclaration * DataTypeVarNameAndVarEqualsGrammarAction(char * dataType, char * varName, tVarEquals *varEquals){
+tVarDeclaration * DataTypeVarNameAndVarEqualsGrammarAction(char * dataType, char * varName, tVarEquals * varEquals){
 	LogDebug("\tDataTypeVarNameAndVarEqualsGrammarAction()");
 	tVarDeclaration * res = calloc(BLOCK, sizeof(tVarDeclaration));
 	if (res == NULL) {
