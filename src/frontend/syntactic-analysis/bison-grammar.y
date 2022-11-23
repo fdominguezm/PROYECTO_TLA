@@ -215,7 +215,7 @@ codeComponents: ifStatement 																{ $$ = IfGrammarAction($1); }
 
 ifStatement: IF logicalExpression OPEN_BRACKET codeList CLOSE_BRACKET elseStatement			{$$ = IfInitializedGrammarAction($2, $4, $5);}
 	;
-
+	
 elseStatement: %empty 																		{ $$ = EmptyGrammarAction();}
 	| ELSE ifStatement																		{ $$ = ElseIfGrammarAction($2); }
 	| ELSE OPEN_BRACKET codeList CLOSE_BRACKET												{ $$ = ElseCodeListGrammarAction($3); }
