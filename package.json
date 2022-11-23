@@ -1,0 +1,25 @@
+{
+  "name": "proyecto_tla",
+  "version": "1.0.0",
+  "description": "Compiler project for writing SQL queries from an object oriented language.",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fdominguezm/PROYECTO_TLA.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/fdominguezm/PROYECTO_TLA/issues"
+  },
+  "homepage": "https://github.com/fdominguezm/PROYECTO_TLA#readme",
+  "dependencies": {
+    "pg": "^8.8.0"
+  }
+}

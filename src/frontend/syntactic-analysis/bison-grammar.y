@@ -52,6 +52,8 @@
 
 	// Terminales.
 	int token;
+	int integer;
+	char * className;
 
 }
 
@@ -86,10 +88,10 @@
 %token <token> INTEGER
 %token <token> STRING
 %token <token> BOOLEAN
-%token <token> INTEGER_VALUE
+%token <integer> INTEGER_VALUE
 %token <token> STRING_VALUE
 
-%token <token> CAPITALIZED_NAME
+%token <className> CAPITALIZED_NAME
 %token <token> ALPHANUMERIC_NAME
 
 %token <token> IF
@@ -154,7 +156,6 @@ classList: classDeclaration																	{ $$ = ClassDeclarationGrammarAction
 
 classDeclaration: CAPITALIZED_NAME OPEN_BRACKET varList CLOSE_BRACKET								{ $$ = VarListGrammarAction($1,$3);}
 	;
-
 
 
 instanceAttribute: ALPHANUMERIC_NAME DOT ALPHANUMERIC_NAME														{ $$ = InstanceAttributeGrammarAction($1,$3);}

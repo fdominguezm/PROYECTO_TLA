@@ -87,13 +87,17 @@ void IgnoredPatternAction(const char * lexeme, const int length) {
 	// Como no debe hacer nada con el patrón, solo se loguea en consola.
 }
 
-token CapitalizedWordPatternAction(const char * lexeme) {
+token CapitalizedWordPatternAction(const char * lexeme, int len) {
 	LogDebug("CapitalizedWordPatternAction: '%s'.", lexeme);
-	yylval.token = CAPITALIZED_NAME;
+	// Reservar memoria para el lexema identificado y el \0 final:
+	char * text = (char *) calloc(len + 1, sizeof(char));
+	// Copiar el lexema y \0 para evitar segmentation-faults:
+	strncpy(text, lexeme, length);
+	yylval.className = text;
 	return CAPITALIZED_NAME;
 }
 
-token AlphanumericWordPatternAction(const char * lexeme) {
+token AlphanumericWordPatternAction(const char * lexeme, int len) {
 	LogDebug("AlphanumericWordPatternAction: '%s'.", lexeme);
 	yylval.token = ALPHANUMERIC_NAME;
 	return ALPHANUMERIC_NAME;
@@ -261,9 +265,18 @@ token CommaPatternAction(const char * lexeme) {
 	return COMMA;
 }
 
-token IntegerValuePatternAction(const char * lexeme) {
+token IntegerValuePatternAction(const char * lexeme, int length) {
 	LogDebug("IntegerValuePatternAction: '%s'.", lexeme);
-	yylval.token = INTEGER_VALUE;
+	  // Reservar memoria para el lexema identificado y el \0 final:
+    char * text = (char *) calloc(length + 1, sizeof(char));
+    // Copiar el lexema y \0 para evitar segmentation-faults:
+    strncpy(text, lexeme, length);
+    // Convertir el lexema en un entero de verdad:
+    yylval.integer = atoi(text);
+    // Liberar la memoria, ya que solo nos interesa el resultado de atoi(.)
+    // (no debería llamar a free(.), si “text” debe ser utilizado en Bison):
+    free(text);
+    // Indicarle a Bison de qué terminal se trata:
 	return INTEGER_VALUE;	
 }
 

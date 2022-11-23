@@ -73,11 +73,11 @@ whitespace		[ \f\n\r\t\v]
 "avg"                                       { return AverageValuePatternAction(yytext); }
 "delete"                                    { return DeletePatternAction(yytext);}
 
-[A-Z][a-z]*                                 { return CapitalizedWordPatternAction(yytext); }
-[a-zA-Z][a-zA-Z0-9_]*                       { return AlphanumericWordPatternAction(yytext); } 
+[A-Z][a-z]*                                 { return CapitalizedWordPatternAction(yytext, yyleng); }
+[a-z][a-zA-Z0-9_]*                       { return AlphanumericWordPatternAction(yytext, yyleng); } 
 
 
-[0-9]+                                      { return IntegerValuePatternAction(yytext); }
+[0-9]+                                      { return IntegerValuePatternAction(yytext, yyleng); }
 
 {whitespace}+					            { IgnoredPatternAction(yytext, yyleng); }
 .											{ return UnknownPatternAction(yytext, yyleng); }
