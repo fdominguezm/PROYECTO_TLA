@@ -120,7 +120,7 @@ typedef struct tCodeComponents{
 	char * varName;
 	tInstanceAtt * instanceAtt;
 	struct tClassMethod * classMethod;
-	textNode * comment;
+	char * comment;
 	tVarEquals * varEq;
 } tCodeComponents;
 
@@ -152,7 +152,7 @@ typedef struct tParamList{
 } tParamList;
 
 typedef struct tVarDeclaration{
-	char * dataType;
+	textNode * dataType;
 	char * varName;
 	char * className;
 	tVarEquals *varEq;

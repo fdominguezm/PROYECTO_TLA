@@ -92,7 +92,7 @@ token CapitalizedWordPatternAction(const char * lexeme, int len) {
 	// Reservar memoria para el lexema identificado y el \0 final:
 	char * text = (char *) calloc(len + 1, sizeof(char));
 	// Copiar el lexema y \0 para evitar segmentation-faults:
-	strncpy(text, lexeme, length);
+	strncpy(text, lexeme, len);
 	yylval.className = text;
 	return CAPITALIZED_NAME;
 }

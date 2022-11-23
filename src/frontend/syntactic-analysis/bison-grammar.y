@@ -16,42 +16,43 @@
 	*/
 
 	// No-terminales (frontend).
-	int program;
+	tProgram * program;
 
-	int classSection;
-	int classList;
-	int classDeclaration;
-	int instanceAttribute;
-	int classMethod;
+	tClassSection *classSection;
+	tClassList *classList;
+	tClassDeclaration *classDeclaration;
+	tInstanceAtt * instanceAttribute;
+	tClassMethod* classMethod;
 
-	int varList;
-	int varDeclaration;
-	int varEquals;
+	tVarList* varList;
+	tVarDeclaration *varDeclaration;
+	tVarEquals *varEquals;
 	
-	int dataType;
-	int dataValue;
+	textNode * dataType;
+	tDataValue *dataValue;
 
-	int codeSection;
-	int codeComponents;
+	tCodeSection * codeSection;
+	tCodeComponents *codeComponents;
+	tCodeList *codeList;
 
-	int ifStatement;
-	int elseStatement;
-	int whileStatement;
-
-
-	int variableDefinition;
+	tIfStatement * ifStatement;
+	tElseStatement * elseStatement;
+	tWhileStatement *whileStatement;
 	
-	int paramList;
+	tParamList *paramList;
 
-	int logicalExpression;
-	int expression;
-	int factor;
+	tLogicalExpression *logicalExpression;
+	tExpression *expression;
+	Factor *factor;
 	int constant;
 
-	int comment;
+	tCodeComponents *comment;
+
+	char * methods;
 
 	// Terminales.
 	int token;
+	char * stringToken;
 	int integer;
 	char * className;
 
@@ -72,43 +73,43 @@
 %token <token> LTEQ
 %token <token> NOTEQ
 
-%token <token> OPEN_PARENTHESIS
-%token <token> CLOSE_PARENTHESIS
+%token <stringToken> OPEN_PARENTHESIS
+%token <stringToken> CLOSE_PARENTHESIS
 
-%token <token> OPEN_BRACKET
-%token <token> CLOSE_BRACKET
-%token <token> SEMI_COLON
-%token <token> DOT
-%token <token> COMMA
+%token <stringToken> OPEN_BRACKET
+%token <stringToken> CLOSE_BRACKET
+%token <stringToken> SEMI_COLON
+%token <stringToken> DOT
+%token <stringToken> COMMA
 
-%token <token> CLASS_SECTION 
-%token <token> NEW
-%token <token> RETURN
+%token <stringToken> CLASS_SECTION 
+%token <stringToken> NEW
+%token <stringToken> RETURN
 
-%token <token> INTEGER
-%token <token> STRING
-%token <token> BOOLEAN
-%token <integer> INTEGER_VALUE
+%token <stringToken> INTEGER
+%token <stringToken> STRING
+%token <stringToken> BOOLEAN
+%token <token> INTEGER_VALUE
 %token <token> STRING_VALUE
 
 %token <className> CAPITALIZED_NAME
-%token <token> ALPHANUMERIC_NAME
+%token <stringToken> ALPHANUMERIC_NAME
 
-%token <token> IF
-%token <token> ELSE
-%token <token> WHILE
+%token <stringToken> IF
+%token <stringToken> ELSE
+%token <stringToken> WHILE
 
-%token <token> AND
-%token <token> OR
-%token <token> TRUEE
-%token <token> FALSEE
+%token <stringToken> AND
+%token <stringToken> OR
+%token <stringToken> TRUEE
+%token <stringToken> FALSEE
 
-%token <token> MIN
-%token <token> MAX
-%token <token> AVG
-%token <token> DELETE
+%token <stringToken> MIN
+%token <stringToken> MAX
+%token <stringToken> AVG
+%token <stringToken> DELETE
 
-%token <token> COMMENT
+%token <stringToken> COMMENT
 
 // Tipos de dato para los no-terminales generados desde Bison.
 %type <program> program
@@ -132,7 +133,9 @@
 %type <logicalExpression> logicalExpression
 %type <classMethod> classMethod
 %type <dataValue> dataValue
-
+%type <methods> methods
+%type <codeList> codeList
+%type <comment> comment
 
 // Reglas de asociatividad y precedencia (de menor a mayor).
 %left ADD SUB
@@ -170,7 +173,7 @@ varList: varDeclaration 																	{ $$ = VarDeclarationGrammarAction($1);
 
 varDeclaration: dataType ALPHANUMERIC_NAME SEMI_COLON 															{ $$ = DataTypeAndVarNameGrammarAction($1,$2);}
 	| dataType ALPHANUMERIC_NAME varEquals SEMI_COLON															{ $$ = DataTypeVarNameAndVarEqualsGrammarAction($1,$2,$3);}
-	| CAPITALIZED_NAME ALPHANUMERIC_NAME EQ NEW CAPITALIZED_NAME OPEN_PARENTHESIS paramList CLOSE_PARENTHESIS SEMI_COLON;	{ $$ = VarNameParamListGrammarAction($1,$2,$7);}
+	| CAPITALIZED_NAME ALPHANUMERIC_NAME EQ NEW CAPITALIZED_NAME OPEN_PARENTHESIS paramList CLOSE_PARENTHESIS SEMI_COLON	{ $$ = VarNameParamListGrammarAction($1,$2,$7);}
 	;
 
 dataValue: TRUEE																			{ $$ = TrueGrammarAction(); }

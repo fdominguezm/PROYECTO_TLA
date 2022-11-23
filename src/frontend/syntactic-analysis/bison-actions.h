@@ -67,10 +67,11 @@ tDataValue * FalseGrammarAction();
 tDataValue * StringValueGrammarAction(char * value);
 tDataValue * IntegerValueGrammarAction(int value);
 
+
 tVarEquals * VarEqDataValueGrammarAction(tDataValue * dataVal);
-tVarEquals VarEqInstanceAttributeGrammarAction(tInstanceAtt instanceAtt);
+tVarEquals * VarEqInstanceAttributeGrammarAction(tInstanceAtt *instanceAtt);
 tVarEquals * VarEqVarNameGrammarAction(char * varName);
-tVarEquals VarEqClassMethodGrammarAction(tClassMethod classMethod); 
+tVarEquals *VarEqClassMethodGrammarAction(tClassMethod *classMethod); 
 
 textNode * TypeGrammarAction(char * type);
 

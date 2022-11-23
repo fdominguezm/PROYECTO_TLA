@@ -213,7 +213,7 @@ tVarDeclaration * VarNameParamListGrammarAction(char * className, char * varName
 	return res;
 }
 
-tVarDeclaration * DataTypeAndVarNameGrammarAction(char * dataType, char * varName){
+tVarDeclaration * DataTypeAndVarNameGrammarAction(textNode * dataType, char * varName){
 	LogDebug("\tDataTypeAndVarNameGrammarAction()");
 	tVarDeclaration * res = calloc(BLOCK, sizeof(tVarDeclaration));
 	if (res == NULL) {
@@ -496,6 +496,7 @@ tCodeComponents * WhileGrammarAction(tWhileStatement * whileStatement) {
 	res->classMethod = NULL;
 	res->comment = NULL;
 	res->varEq = NULL;
+	res->type = 
 	return res;
 }
 tCodeComponents * CodeVarDeclarationGrammarAction(tVarDeclaration * varDec) {
@@ -632,5 +633,41 @@ tWhileStatement * WhileInitializedGrammarAction(tLogicalExpression * logExp, tCo
 }
 
 
+tVarEquals * VarEqInstanceAttributeGrammarAction(tInstanceAtt *instanceAtt){
+	LogDebug("\tVarEqInstanceAttributeGrammarAction()");
+	tVarEquals * res = calloc(BLOCK, sizeof(tVarEquals));
+	if (res == NULL) {
+		return NULL;
+	}
+	res->instanceAtt = instanceAtt;
+	res->method = NULL;
+	res->name = NULL;
+	res->val = NULL;
+	return res;			
+}
 
+tVarEquals * VarEqVarNameGrammarAction(char * varName){
+	LogDebug("\tVarEqVarNameGrammarAction()");
+	tVarEquals * res = calloc(BLOCK, sizeof(tVarEquals));
+	if (res == NULL) {
+		return NULL;
+	}
+	res->instanceAtt = NULL;
+	res->method = NULL;
+	res->name = varName;
+	res->val = NULL;
+	return res;		
+}
+tVarEquals *VarEqClassMethodGrammarAction(tClassMethod *classMethod){
+	LogDebug("\tVarEqClassMethodGrammarAction()");
+	tVarEquals * res = calloc(BLOCK, sizeof(tVarEquals));
+	if (res == NULL) {
+		return NULL;
+	}
+	res->instanceAtt = NULL;
+	res->method = classMethod;
+	res->name = NULL;
+	res->val = NULL;
+	return res;	
+}
 
