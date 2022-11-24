@@ -1,0 +1,12 @@
+CLASSES{
+    A{
+        int a;
+    }
+}
+
+A a = new A(8);
+
+while (a > 0)
+{
+    a = 0;
+}

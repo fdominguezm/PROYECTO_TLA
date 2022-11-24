@@ -275,6 +275,18 @@ tVarEquals * VarEqDataValueGrammarAction(tDataValue * dataVal){
 	return res;
 }
 
+tLogicalExpression * ClassMethodLogicalExpressionGrammarAction(tClassMethod * classMethod){
+	LogDebug("\tClassMethodLogicalExpressionGrammarAction()");
+	tLogicalExpression * res = calloc(BLOCK, sizeof(tLogicalExpression));
+	if (res == NULL) {
+		return NULL;
+	}
+	res->classMethod = classMethod;
+	res->type = CLASS_METHOD_LOGEX;
+
+	return res;
+}
+
 tLogicalExpression * MultipleLogicalExpressionGrammarAction(tLogicalExpression * left, char * logConnector, tLogicalExpression * right ){
 	LogDebug("\tMultipleLogicalExpressionGrammarAction()");
 	tLogicalExpression * res = calloc(BLOCK, sizeof(tLogicalExpression));

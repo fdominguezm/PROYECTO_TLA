@@ -1,0 +1,14 @@
+
+CLASSES {
+      Auto {
+        string modelo;
+        int anio;
+    }
+}
+
+Auto auto1 = new Auto("CRV", 2017);
+
+if (auto1.anio < 2018)
+{
+    auto1.anio = 2018;
+}

@@ -146,7 +146,7 @@
 
 %%
 
-program: classSection codeSection															{ $$ = ProgramGrammarAction($1,$2); }		
+program: classSection codeSection															{ $$ = ProgramGrammarAction($1,$2); }	
 	;
 
 classSection: CLASS_SECTION OPEN_BRACKET classList CLOSE_BRACKET							{ $$ = ClassListGrammarAction($3); }	 
@@ -212,7 +212,7 @@ codeComponents: ifStatement 																{ $$ = IfGrammarAction($1); }
 	| COMMENT																				{ $$ = CommentCodeGrammarAction($1); }
 	;
 
-ifStatement: IF logicalExpression OPEN_BRACKET codeList CLOSE_BRACKET elseStatement			{$$ = IfInitializedGrammarAction($2, $4, $6);}
+ifStatement: IF OPEN_PARENTHESIS logicalExpression CLOSE_PARENTHESIS OPEN_BRACKET codeList CLOSE_BRACKET elseStatement			{$$ = IfInitializedGrammarAction($3, $6, $8);}
 	;
 	
 elseStatement: %empty 																		{ $$ = EmptyGrammarAction();}
@@ -220,7 +220,7 @@ elseStatement: %empty 																		{ $$ = EmptyGrammarAction();}
 	| ELSE OPEN_BRACKET codeList CLOSE_BRACKET												{ $$ = ElseCodeListGrammarAction($3); }
 	;
 
-whileStatement: WHILE logicalExpression OPEN_BRACKET codeList CLOSE_BRACKET					{ $$ = WhileInitializedGrammarAction($2,$4);}
+whileStatement: WHILE OPEN_PARENTHESIS logicalExpression CLOSE_PARENTHESIS OPEN_BRACKET codeList CLOSE_BRACKET					{ $$ = WhileInitializedGrammarAction($3,$6);}
 	;
 
 logicalExpression:  logicalExpression[left] AND logicalExpression[right] 					{ $$ = MultipleLogicalExpressionGrammarAction($left, $2,$right); }
@@ -235,6 +235,7 @@ logicalExpression:  logicalExpression[left] AND logicalExpression[right] 					{ 
 	|  instanceAttribute 																	{ $$ = InstanceAttLogicalExpressionGrammarAction($1); }
 	|  dataValue 																			{ $$ = DataValueLogicalExpressionGrammarAction($1); }
 	|  expression 																			{ $$ = ExpressionLogicalExpressionGrammarAction($1); }
+	|  classMethod																			{ $$ = ClassMethodLogicalExpressionGrammarAction($1); }
 	;
 
 

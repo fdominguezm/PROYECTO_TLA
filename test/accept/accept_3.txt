@@ -13,7 +13,7 @@ Celular cel2 = new Celular("Motorola", 2000, 2015, "8765-4321", false);
 Celular cel3 = new Celular("Apple", 3000, 2012, "5678-1234", true);
 Celular cel4 = new Celular("Samsung", 4000, 2005, "1234-4321", false);
 
-int minAnio = Celular.MIN(anio);
+int minAnio = Celular.min(anio);
 
-// minAnio = 2005;
+/* minAnio = 2005; */
   

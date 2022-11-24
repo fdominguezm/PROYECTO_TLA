@@ -103,13 +103,26 @@ typedef struct tInstanceAtt
 	tVarEquals * varEq;
 }tInstanceAtt;
 
+typedef enum MethodType {
+	MAX_METHOD,
+	MIN_METHOD,
+	AVG_METHOD,
+	DELETE_METHOD
+} MethodType;
+
+typedef struct tClassMethod
+{
+	char * className;
+	MethodType method;
+	char * arguments;
+}tClassMethod;
 typedef enum LogicalExpresionType{
 	MULTIPLE_LOGEX,
 	VAR_NAME_LOGEX,
 	INSTANCE_ATT_LOGEX,
 	DATA_VAL_LOGEX,
-	EXP_LOGEX
-
+	EXP_LOGEX,
+	CLASS_METHOD_LOGEX
 }LogExType;
 
 typedef struct tLogicalExpression{
@@ -120,6 +133,7 @@ typedef struct tLogicalExpression{
 	tInstanceAtt * instanceAtt;
 	tDataValue * dataValue;
 	int expression;
+	tClassMethod * classMethod;
 	LogExType type;
 }tLogicalExpression;
 
@@ -217,19 +231,6 @@ typedef struct tVarList{
 }tVarList;
 
 
-typedef enum MethodType {
-	MAX_METHOD,
-	MIN_METHOD,
-	AVG_METHOD,
-	DELETE_METHOD
-} MethodType;
-
-typedef struct tClassMethod
-{
-	char * className;
-	MethodType method;
-	char * arguments;
-}tClassMethod;
 
 typedef struct tClassDeclaration
 {

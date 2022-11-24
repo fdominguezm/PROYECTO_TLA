@@ -9,3 +9,5 @@ CLASSES {
         int anio;
     }
 }
+
+int a = 1;

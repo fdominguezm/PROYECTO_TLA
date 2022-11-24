@@ -1,8 +1,0 @@
-CLASSES {
-    Auto {
-        string modelo;
-        int anio;
-    }
-}
-
-int a = 28;

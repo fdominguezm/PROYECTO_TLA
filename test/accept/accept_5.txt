@@ -9,4 +9,4 @@ CLASSES {
 Person benja = new Person("Benja", 23, false);
 Person juan = new Person("juan", 22, false);
 
-Person.MAX("age");
+Person.max(age);
