@@ -5,14 +5,9 @@ CLASSES {
     }
 }
 
-Auto auto1 = new Auto("CRV", 2021);
+Auto auto1 = new Auto("CRV", 2020);
 Auto auto2 = new Auto("CRV", 2019);
 Auto auto3 = new Auto("CRV", 2012);
 Auto auto4 = new Auto("CRV", 2017);
 
-if (Auto.max(anio) < 2021)
-{
-    auto1.anio = 2021;
-}else{
-    auto1.anio = 2020;
-}
+int average = Auto.avg(anio);

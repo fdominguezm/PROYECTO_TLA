@@ -106,6 +106,7 @@ tLogicalExpression * VarNameLogicalExpressionGrammarAction(char * varName);
 tLogicalExpression * InstanceAttLogicalExpressionGrammarAction(tInstanceAtt * instanceAtt);
 tLogicalExpression * DataValueLogicalExpressionGrammarAction(tDataValue * value); 
 tLogicalExpression * ExpressionLogicalExpressionGrammarAction(int expression);
+tLogicalExpression * ClassMethodLogicalExpressionGrammarAction(tClassMethod * classMethod);
 
 tParamList * ParamListGrammarAction(tDataValue * value);
 tParamList * MultipleParamListGrammarAction(tDataValue * dataVal, tParamList * paramList);

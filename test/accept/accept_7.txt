@@ -1,0 +1,7 @@
+CLASSES{
+    Comentario{
+        string val;
+    }
+}
+/*ESTO ES UN COMENTARIO*/
+int b = 0;
