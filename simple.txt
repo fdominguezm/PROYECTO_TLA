@@ -1,0 +1,18 @@
+CLASSES {
+  House {
+    int price;
+    string street;
+  }
+}
+
+int a = 2;
+
+if (a > 2) {
+  
+}
+
+string name = "gaillard";
+
+int b = House.max(price);
+
+House trola = new House(2000, "brisa");

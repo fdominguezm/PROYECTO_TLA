@@ -29,3 +29,17 @@ client.query('delete from auto', (err, res) => {
   client.end()
 })
 
+function createTable(name, varObj) {
+
+}
+
+function insertTable(tableName, values) {
+
+}
+
+insertTable(tableName, )
+
+client.query("CREATE TABLE House(price INTEGER, street VARCHAR", (err, res) => {
+  console.log(err ? err.stack : res)
+  client.end()
+})
