@@ -1,22 +1,29 @@
 #include "generator.h"
 
 
+FILE * fd;
 
 /**
  * Implementación de "generator.h".
  */
 
 void Generator(tProgram * node) {
+	LogDebug("Generator\n");
+	
+	const char * file_name = "output.js";
+	fd = fopen(file_name, "w+");
 
 	generateClassSection(node->classSection);
 	generateCodeSection(node->codeSection);
 }
 
 void generateClassSection(tClassSection * node){
+	LogDebug("\tgenerateClassSection()");
 	generateClassList(node->classList);
 }
 
 void generateClassList(tClassList * node){
+	LogDebug("\tgenerateClassList()");
 	generateClassDeclaration(node->classDeclaration);
 	if (node->type == MULTIPLE_CLASS_DECLARATION)
 	{
@@ -25,39 +32,71 @@ void generateClassList(tClassList * node){
 }
 
 void generateClassDeclaration(tClassDeclaration * node) {
-	fprintf("../../../index.js","createTable(\'%s\', ", node->className);
-	generateVarList(node->varList);
+	LogDebug("\tgenerateClassDeclaration()");
+	fprintf(fd,"const %s = sequelize.define( \"%s\", {", node->className,node->className);
+	generateAttrList(node->attrList);
 }
 
 void generateInstanceAttribute(tInstanceAtt * node){
+	LogDebug("\tgenerateInstanceAttribute()");
 	if (node->varEq != NULL)
 	{
-		//frprintf para cambiar el valor de un atributo de una tabla
+		fprintf(fd, "%s.%s", node->instanceName, node->varName);
 		generateVarEquals(node->varEq);
+		fprintf(fd, "await %s.save();\n", node->instanceName);
 		return;
 	}
-	
-	// Aca hago un fprintf para hacer un get del atributo node->varName en la tabla node->instanceName
+	fprintf(fd, "%s.%s", node->instanceName, node->varName);
+	fprintf(fd, ";\n");
+}
+
+void generateAttrList(tAttrList * node) {
+	LogDebug("\tgenerateAttrList()");
+	if (node == NULL) {
+		fprintf(fd,"});\n");
+		return;
+	}
+	generateAttrDeclaration(node->attrDeclaration);
+	generateAttrList(node->next);
+}
+
+void generateAttrDeclaration(tAttrDeclaration * node) {
+	LogDebug("\tgenerateAttrDeclaration()");	
+	switch (node->dataType->type)
+	{
+		case BOOL_TYPE:
+			fprintf(fd, "%s: DataTypes.BOOLEAN", node->varName);
+			break;
+		
+		case STR_TYPE:
+			fprintf(fd, "%s: DataTypes.STRING", node->varName);			
+			break;
+
+		case INT_TYPE:
+			fprintf(fd, "%s: DataTypes.INTEGER", node->varName);			
+			break;
+	}
 }
 
 void generateClassMethod(tClassMethod * node){
+	LogDebug("\tgenerateClassMethod()");	
 	switch (node->method)
 	{
 	case MAX_METHOD:
-		//fprintf para obtener el max node->arguments de la tabla node->className
+		fprintf(fd, "await %s.max(%s);\n", node->className, node->arguments);
 		break;
 	
 	case MIN_METHOD:
-		//fprintf para obtener el min node->arguments de la tabla node->className
+		fprintf(fd, "await %s.min(%s);\n", node->className, node->arguments);
 		break;
 	
 	case AVG_METHOD:
 		//fprintf para hacer n avg node->arguments de la tabla node->className
 		break;
 
-	case DELETE_METHOD:
-		//fprintf para eliminar node->arguments de la tabla node->className
-		break;
+	// case DELETE_METHOD:
+	// 	//fprintf para eliminar node->arguments de la tabla node->className
+	// 	break;
 
 	default:
 		break;
@@ -65,54 +104,66 @@ void generateClassMethod(tClassMethod * node){
 }
 
 void generateVarList(tVarList * node) {
-	fprintf("../../../index.js","{");
+	LogDebug("\tgenerateVarList()");	
+	fprintf(fd,"{\n");
 	generateVarDeclaration(node->varDeclaration);
 	if (node->type == MULTIPLE_VAR_DECLARATION) {
-		fprintf("../../../index.js",",");
+		fprintf(fd,",");
 		generateVarList(node->next);
 	} else {
-		fprintf("../../../index.js","});\n");
+		fprintf(fd,"});\n");
 	}
 }
 
 void generateVarDeclaration(tVarDeclaration * node) {
+	LogDebug("\tgenerateVarDeclaration()");	
+	fprintf(fd,"const %s", node->varName);
 	if (node->type == VARDEC_VARNAME_DATATYPE)
 	{
-		fprintf("../../../index.js","%s: \'%s\'", node->varName, node->dataType);
+		fprintf(fd,";\n");
 	}else if(node->type == VARDEC_CLASSNAME_VARNAME_PARAMLIST){
-		//ACA INICIALIZAMOS LOS ATRIBUTOS DE LA CLASE
+		fprintf(fd," = await %s.create({", node->className);
 	}else if(node->type = VARDEC_DATATYPE_VARNAME_VAREQ){
-		//ACA CREO UNA VARIABLE Y LA INICIALIZO
+		generateVarEquals(node->varEq);
 	}
 }
 
 
 void generateParamList(tParamList * node){
-	generateDataValue(node->value); //Esto esta bien? hay que pasarle el nombre del parametro?
-	if (node->next == NULL)
+	LogDebug("\tgenerateParamList()");	
+	if (node == NULL)
 	{
+		fprintf(fd, "});\n");
 		return;
+	}
+	fprintf(fd,"%s: ", node->attrName);
+	generateDataValue(node->value); 
+	if (node->next != NULL)
+	{
+		fprintf(fd,",");
 	}
 	generateParamList(node->next);
 }
 
 void generateVarEquals(tVarEquals * node){
+	LogDebug("\tgenerateVarEquals()");	
+	fprintf(fd, "=");
 	switch (node->type)
 	{
 	case VAREQ_INSTANCE_ATT:
-		generateInstanceAttribute(node->instanceAtt); //Lo llamo asi no? no tengo que meter un fprontf aca creo
+		generateInstanceAttribute(node->instanceAtt); 
 		break;
 
 	case VAREQ_VAR_NAME:
-		//fprintf de un get del atributo node->name de la tabla de variables
+		fprintf(fd,"%s;\n", node->name);
 		break;
 
 	case VAREQ_CLASS_METHOD:
-		//fprintf de un get del atributo node->method
+		generateClassMethod(node->method);
 		break;
 
 	case VAREQ_DATA_VALUE:
-		//fprintf del atributo node->val
+		generateDataValue(node->val);
 		break;		
 
 	default:
@@ -121,10 +172,12 @@ void generateVarEquals(tVarEquals * node){
 }
 
 void generateCodeSection(tCodeSection * node) {
+	LogDebug("\tgenerateCodeSection()");	
 	generateCodeList(node->codeList);
 }
 
 void generateCodeList(tCodeList * node) {
+	LogDebug("\tgenerateCodeList()");	
 	if (node == NULL) {
 		return;
 	}
@@ -133,6 +186,7 @@ void generateCodeList(tCodeList * node) {
 }
 
 void generateCodeComponents(tCodeComponents * node) {
+	LogDebug("\tgenerateCodeComponents()");	
 	switch (node->type)
 	{
 	case WHILE_COMPONENT:
@@ -148,7 +202,7 @@ void generateCodeComponents(tCodeComponents * node) {
 		break;
 	
 	case VAR_EQUALS_COMPONENT:
-		/*accedo a la tabla de varibles, acceso a la variable*/
+		fprintf(fd, "%s", node->varName);
 		generateVarEquals(node->varEq);
 		break;
 	
@@ -170,24 +224,35 @@ void generateCodeComponents(tCodeComponents * node) {
 }
 
 void generateWhileStatement(tWhileStatement * node) {
+	LogDebug("\tgenerateWhileStatement()");	
+	fprintf(fd,"while (" );
 	generateLogicalExpression(node->logicalExpression);
+	fprintf(fd,"){\n" );
 	generateCodeList(node->codeList);
+	fprintf(fd,"}\n" );
 }
 
 void generateIfStatement(tIfStatement * node) {
+	LogDebug("\tgenerateIfStatement()");	
+	fprintf(fd,"if (" );
 	generateLogicalExpression(node->logicalExpression);
+	fprintf(fd,"){\n" );
 	generateCodeList(node->codeList);
+	fprintf(fd,"}\n" );
 	generateElseStatement(node->elseStatement);
 }
 
 void generateElseStatement(tElseStatement * node) {
+	LogDebug("\tgenerateElseStatement()");
 	if (node == NULL) {
 		return;
 	}
 	switch (node->type)
 	{
 		case ELSE_CODE_LIST:
+			fprintf(fd,"{\n" );
 			generateCodeList(node->codeList);
+			fprintf(fd,"}\n" );
 			break;
 		case ELSE_IF:
 			generateIfStatement(node->ifStatement);
@@ -199,15 +264,15 @@ void generateElseStatement(tElseStatement * node) {
 }
 
 void generateLogicalExpression(tLogicalExpression * node) {
-	switch (node->type)
-	{
+	LogDebug("\tgenerateLogicalExpression()");
+	switch(node->type) {
 		case MULTIPLE_LOGEX:
 			generateLogicalExpression(node->left);
 			generateLogicalExpression(node->right);
 			break;
 		
 		case VAR_NAME_LOGEX:
-			/*llamo la variable */
+			fprintf(fd, "%s", node->varName);
 			break;
 		
 		case INSTANCE_ATT_LOGEX:
@@ -228,29 +293,22 @@ void generateLogicalExpression(tLogicalExpression * node) {
 }
 
 void generateDataValue(tDataValue * node){
+	LogDebug("\tgenerateDataValue()");	
 	switch (node->type)
 	{
 		case BOOLEAN_VAL:
-			fprintf("../../../index.js","%d", node->boolVal);
+			fprintf(fd,"%d", node->boolVal);
 			break;
 
 		case STRING_VAL:
-			fprintf("../../../index.js","%s", node->stringVal);
+			fprintf(fd,"%s", node->stringVal);
 			break;
 
 		case INTEGER_VAL:
-			fprintf("../../../index.js","%d", node->integerVal);
+			fprintf(fd,"%d", node->integerVal);
 			break;
 
 		default:
 			break;
 	}
 }
-/*
-
-	createTable('House', {price:'int', street:'string});
-	insertIntoTable('House', {price:2000, street:'lm campos'})
-*/
-
-
-// {price: "int",street: "string"}

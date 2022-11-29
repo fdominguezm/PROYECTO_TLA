@@ -101,5 +101,6 @@ token MinValuePatternAction(const char * lexeme);
 token AverageValuePatternAction(const char * lexeme);
 
 token DeletePatternAction(const char * lexeme); 
+token ColonPatternAction(const char * lexeme) ;
 
 #endif

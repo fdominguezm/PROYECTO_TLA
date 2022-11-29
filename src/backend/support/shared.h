@@ -65,9 +65,16 @@ typedef struct Factor{
  	tExpression * expression;
 } Factor;
 
-typedef struct textNode{
+typedef enum DataType {
+	BOOL_TYPE,
+	STR_TYPE,
+	INT_TYPE
+} DataType;
+
+typedef struct tDataType{
 	char * text;
-}textNode;
+	DataType type;
+}tDataType;
 
 typedef enum DataValueType {
 	BOOLEAN_VAL,
@@ -202,6 +209,7 @@ typedef struct tVar{
 }tVar;
 
 typedef struct tParamList{
+	char * attrName;
 	tDataValue * value;
 	struct tParamList * next;
 } tParamList;
@@ -213,7 +221,7 @@ typedef enum VarDeclarationType {
 }VarDeclarationType;
 
 typedef struct tVarDeclaration{
-	textNode * dataType;
+	tDataType * dataType;
 	char * varName;
 	char * className;
 	tVarEquals * varEq;
@@ -232,12 +240,20 @@ typedef struct tVarList{
 	VarListType type;
 }tVarList;
 
+typedef struct tAttrDeclaration{
+	tDataType * dataType;
+	char * varName;
+}tAttrDeclaration;
 
+typedef struct tAttrList{
+	tAttrDeclaration * attrDeclaration;
+	struct tAttrList * next;
+}tAttrList;
 
 typedef struct tClassDeclaration
 {
 	char * className;
-	tVarList * varList;
+	tAttrList * attrList;
 }tClassDeclaration;
 
 typedef enum ClassListType {

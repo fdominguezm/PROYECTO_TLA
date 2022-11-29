@@ -24,11 +24,14 @@
 	tInstanceAtt * instanceAttribute;
 	tClassMethod* classMethod;
 
-	tVarList* varList;
+	tAttrList * attrList;
+	tAttrDeclaration * attrDeclaration;
+
+	// tVarList* varList;
 	tVarDeclaration *varDeclaration;
 	tVarEquals *varEquals;
 	
-	textNode * dataType;
+	tDataType * dataType;
 	tDataValue *dataValue;
 
 	tCodeSection * codeSection;
@@ -79,6 +82,7 @@
 %token <stringToken> SEMI_COLON
 %token <stringToken> DOT
 %token <stringToken> COMMA
+%token <stringToken> COLON
 
 %token <stringToken> CLASS_SECTION 
 %token <stringToken> NEW
@@ -118,7 +122,7 @@
 %type <classList> classList
 %type <classDeclaration> classDeclaration
 %type <instanceAttribute> instanceAttribute
-%type <varList> varList
+// %type <varList> varList
 %type <paramList> paramList
 %type <varDeclaration> varDeclaration
 %type <varEquals> varEquals
@@ -133,6 +137,8 @@
 %type <dataValue> dataValue
 %type <method> method
 %type <codeList> codeList
+%type <attrList> attrList
+%type <attrDeclaration> attrDeclaration
 
 
 
@@ -158,19 +164,25 @@ classList: classDeclaration																	{ $$ = ClassDeclarationGrammarAction
 	| classDeclaration classList															{ $$ = MultipleClassDeclarationGrammarAction($1,$2);}									
 	;
 
-classDeclaration: CAPITALIZED_NAME OPEN_BRACKET varList CLOSE_BRACKET								{ $$ = VarListGrammarAction($1,$3);}
+classDeclaration: CAPITALIZED_NAME OPEN_BRACKET attrList CLOSE_BRACKET								{ $$ = VarListGrammarAction($1,$3);}
 	;
 
 
-instanceAttribute: ALPHANUMERIC_NAME DOT ALPHANUMERIC_NAME														{ $$ = InstanceAttributeGrammarAction($1,$3);}
+instanceAttribute: ALPHANUMERIC_NAME DOT ALPHANUMERIC_NAME													{ $$ = InstanceAttributeGrammarAction($1,$3);}
 	;
 
 classMethod: CAPITALIZED_NAME DOT method OPEN_PARENTHESIS ALPHANUMERIC_NAME CLOSE_PARENTHESIS				{ $$ = MethodsAndVarNameGrammarAction($1,$3,$5);}
 	;
 
-varList: varDeclaration 																	{ $$ = VarDeclarationGrammarAction($1); }
-	| varDeclaration varList																{ $$ = MultipleVarDeclarationGrammarAction($1,$2);}
+attrList: attrDeclaration																					{$$ = AttrDecGrammarAction($1);}
+	| attrDeclaration attrList																				{$$ = MultipleAttrDecGrammarAction($1, $2);}
 	;
+
+attrDeclaration: dataType ALPHANUMERIC_NAME SEMI_COLON 														{$$ = ClassAttrDecGrammarAction($1, $2);}
+
+// varList: varDeclaration 																	{ $$ = VarDeclarationGrammarAction($1); }
+// 	| varDeclaration varList																{ $$ = MultipleVarDeclarationGrammarAction($1,$2);}
+// 	;
 
 varDeclaration: dataType ALPHANUMERIC_NAME SEMI_COLON 															{ $$ = DataTypeAndVarNameGrammarAction($1,$2);}
 	| dataType ALPHANUMERIC_NAME varEquals SEMI_COLON															{ $$ = DataTypeVarNameAndVarEqualsGrammarAction($1,$2,$3);}
@@ -183,8 +195,8 @@ dataValue: TRUEE																			{ $$ = TrueGrammarAction(); }
 	| INTEGER_VALUE																				{ $$ = IntegerValueGrammarAction($1); }
 	;
 
-paramList: dataValue																		{ $$ = ParamListGrammarAction($1); }
-	| dataValue COMMA paramList																{ $$ = MultipleParamListGrammarAction($1,$3); }
+paramList: ALPHANUMERIC_NAME COLON dataValue																		{ $$ = ParamListGrammarAction($1,$3); }
+	| ALPHANUMERIC_NAME COLON dataValue COMMA paramList																{ $$ = MultipleParamListGrammarAction($1,$3,$5); }
 	;
 	
 varEquals:  EQ dataValue 														{ $$ = VarEqDataValueGrammarAction($2); }
@@ -193,9 +205,9 @@ varEquals:  EQ dataValue 														{ $$ = VarEqDataValueGrammarAction($2); }
 	| EQ classMethod 																{ $$ = VarEqClassMethodGrammarAction($2); }
 	;
 
-dataType: INTEGER 																			{ $$ = TypeGrammarAction($1); }
-	| STRING 																				{ $$ = TypeGrammarAction($1); }
-	| BOOLEAN																				{ $$ = TypeGrammarAction($1); }
+dataType: INTEGER 																			{ $$ = IntTypeGrammarAction($1); }
+	| STRING 																				{ $$ = StrTypeGrammarAction($1); }
+	| BOOLEAN																				{ $$ = BoolTypeGrammarAction($1); }
 	;
 
 codeSection: codeList																		{ $$ = CodeListGrammarAction($1); }

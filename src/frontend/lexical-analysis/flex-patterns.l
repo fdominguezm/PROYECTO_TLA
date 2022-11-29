@@ -47,6 +47,7 @@ whitespace		[ \f\n\r\t\v]
 "{"                                         { return OpenBracketPatternAction(yytext); }
 "}"                                         { return CloseBracketPatternAction(yytext); }
 ";"                                         { return SemicolonPatternAction(yytext); }
+":"                                         { return ColonPatternAction(yytext); }
 
 "&&"                                        { return AndPatternAction(yytext); }
 "||"                                        { return OrPatternAction(yytext); }

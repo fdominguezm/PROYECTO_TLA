@@ -179,6 +179,12 @@ token SemicolonPatternAction(const char * lexeme) {
 	return SEMI_COLON;
 }
 
+token ColonPatternAction(const char * lexeme) {
+	LogDebug("ColonPatternAction: '%s'.", lexeme);
+	yylval.token = COLON;
+	return COLON;
+}
+
 token ReturnKeywordPatternAction(const char * lexeme) {
 	LogDebug("ReturnKeywordPatternAction: '%s'.", lexeme);
 	yylval.token = RETURN;

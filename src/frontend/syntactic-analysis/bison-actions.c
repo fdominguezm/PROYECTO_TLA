@@ -132,14 +132,14 @@ tClassList * MultipleClassDeclarationGrammarAction(tClassDeclaration * classDecl
 	return res;
 }
 
-tClassDeclaration * VarListGrammarAction(char * className, tVarList * varList){
+tClassDeclaration * VarListGrammarAction(char * className, tAttrList * attrList){
 	LogDebug("\tVarListGrammarAction()");
 	tClassDeclaration * res = calloc(BLOCK, sizeof(tClassDeclaration));
 	if (res == NULL) {
 		return NULL;
 	}
 	res->className = className;
-	res->varList = varList;
+	res->attrList = attrList;
 	return res;
 }
 
@@ -189,7 +189,7 @@ tVarList * MultipleVarDeclarationGrammarAction(tVarDeclaration * varDec,tVarList
 	return res;
 }
 
-tVarDeclaration * DataTypeVarNameAndVarEqualsGrammarAction(textNode * dataType, char * varName, tVarEquals * varEquals){
+tVarDeclaration * DataTypeVarNameAndVarEqualsGrammarAction(tDataType * dataType, char * varName, tVarEquals * varEquals){
 	LogDebug("\tDataTypeVarNameAndVarEqualsGrammarAction()");
 	tVarDeclaration * res = calloc(BLOCK, sizeof(tVarDeclaration));
 	if (res == NULL) {
@@ -215,7 +215,7 @@ tVarDeclaration * VarNameParamListGrammarAction(char * className, char * varName
 	return res;
 }
 
-tVarDeclaration * DataTypeAndVarNameGrammarAction(textNode * dataType, char * varName){
+tVarDeclaration * DataTypeAndVarNameGrammarAction(tDataType * dataType, char * varName){
 	LogDebug("\tDataTypeAndVarNameGrammarAction()");
 	tVarDeclaration * res = calloc(BLOCK, sizeof(tVarDeclaration));
 	if (res == NULL) {
@@ -349,14 +349,14 @@ tLogicalExpression * ExpressionLogicalExpressionGrammarAction(int expression){
 	return res;
 }
 
-tParamList * ParamListGrammarAction(tDataValue * value){
+tParamList * ParamListGrammarAction(char * attrName,tDataValue * value){
 	LogDebug("\tParamListGrammarAction()");
 
 	tParamList * res = calloc(BLOCK, sizeof(tParamList));
 	if (res == NULL) {
 		return NULL;
 	} 
-
+	res->attrName = attrName;
 	res->value = value;
 	res->next = NULL;
 
@@ -364,28 +364,85 @@ tParamList * ParamListGrammarAction(tDataValue * value){
 }
 
 
-tParamList * MultipleParamListGrammarAction(tDataValue * dataVal, tParamList * paramList){
+tParamList * MultipleParamListGrammarAction(char * attrName,tDataValue * dataVal, tParamList * paramList){
 	LogDebug("\tMultipleParamListGrammarAction()");
 
 	tParamList * res = calloc(BLOCK, sizeof(tParamList));
 	if (res == NULL) {
 		return NULL;
 	} 
-
+	res->attrName = attrName;
 	res->value = dataVal;
 	res->next = paramList;
 
 	return res;
 }
 
+tAttrList * AttrDecGrammarAction(tAttrDeclaration * attrDec) {
+	LogDebug("\tAttrDecGrammarAction()");
+	tAttrList * res = calloc(BLOCK, sizeof(tAttrList));
+	if (res == NULL) {
+		return NULL;
+	}
+	res->attrDeclaration = attrDec;
+	res->next = NULL;
+	return res;
+}
 
-textNode * TypeGrammarAction(char * type) {
-	LogDebug("\tTypeGrammarAction()");
-	textNode * res = calloc(BLOCK, sizeof(textNode));
+tAttrList * MultipleAttrDecGrammarAction(tAttrDeclaration * attrDec, tAttrList *next) {
+	LogDebug("\tMultipleAttrGrammarAction()");
+	tAttrList * res = calloc(BLOCK, sizeof(tAttrList));
+	if (res == NULL) {
+		return NULL;
+	}
+	res->attrDeclaration = attrDec;
+	res->next = next;
+	return res;
+}
+
+
+tAttrDeclaration * ClassAttrDecGrammarAction(tDataType * dataType, char * varName){
+	LogDebug("\tClassAttrDecAction()");
+	tAttrDeclaration * res = calloc(BLOCK, sizeof(tAttrDeclaration));
+	if (res == NULL) {
+		return NULL;
+	}
+	res->dataType = dataType;
+	res->varName = varName;
+	return res;
+}
+
+
+tDataType * IntTypeGrammarAction(char * type) {
+	LogDebug("\tIntTypeGrammarAction()");
+	tDataType * res = calloc(BLOCK, sizeof(tDataType));
 	if (res == NULL) {
 		return NULL;
 	}
 	res->text = type;
+	res->type = INT_TYPE;
+	return res;
+}
+
+tDataType * StrTypeGrammarAction(char * type) {
+	LogDebug("\tStrTypeGrammarAction()");
+	tDataType * res = calloc(BLOCK, sizeof(tDataType));
+	if (res == NULL) {
+		return NULL;
+	}
+	res->text = type;
+	res->type = STR_TYPE;
+	return res;
+}
+
+tDataType * BoolTypeGrammarAction(char * type) {
+	LogDebug("\tBoolTypeGrammarAction()");
+	tDataType * res = calloc(BLOCK, sizeof(tDataType));
+	if (res == NULL) {
+		return NULL;
+	}
+	res->text = type;
+	res->type = BOOL_TYPE;
 	return res;
 }
 

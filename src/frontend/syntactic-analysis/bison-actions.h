@@ -47,7 +47,7 @@ tClassList * ClassDeclarationGrammarAction(tClassDeclaration *classDeclaration);
 tClassList * MultipleClassDeclarationGrammarAction(tClassDeclaration *classDeclaration,tClassList* next);
 
 
-tClassDeclaration * VarListGrammarAction(char * className, tVarList *varList);
+tClassDeclaration * VarListGrammarAction(char * className,tAttrList * attrList);
 
 
 tInstanceAtt * InstanceAttributeGrammarAction(char * instanceName, char * varName);
@@ -57,9 +57,9 @@ tVarList * VarDeclarationGrammarAction(tVarDeclaration *varDec);
 tVarList * MultipleVarDeclarationGrammarAction(tVarDeclaration *varDec,tVarList *next);
 
 
-tVarDeclaration * DataTypeVarNameAndVarEqualsGrammarAction(textNode * dataType, char * varName, tVarEquals *varEquals);
+tVarDeclaration * DataTypeVarNameAndVarEqualsGrammarAction(tDataType * dataType, char * varName, tVarEquals *varEquals);
 tVarDeclaration * VarNameParamListGrammarAction(char * className,char * varName,tParamList * paramList);
-tVarDeclaration * DataTypeAndVarNameGrammarAction(textNode * dataType, char * varName);
+tVarDeclaration * DataTypeAndVarNameGrammarAction(tDataType * dataType, char * varName);
 
 
 tDataValue * TrueGrammarAction();
@@ -73,7 +73,9 @@ tVarEquals * VarEqInstanceAttributeGrammarAction(tInstanceAtt *instanceAtt);
 tVarEquals * VarEqVarNameGrammarAction(char * varName);
 tVarEquals *VarEqClassMethodGrammarAction(tClassMethod *classMethod); 
 
-textNode * TypeGrammarAction(char * type);
+tDataType * IntTypeGrammarAction(char * type);
+tDataType * StrTypeGrammarAction(char * type) ;
+tDataType * BoolTypeGrammarAction(char * type);
 
 tCodeSection * CodeListGrammarAction(tCodeList * codeList);
 
@@ -108,8 +110,8 @@ tLogicalExpression * DataValueLogicalExpressionGrammarAction(tDataValue * value)
 tLogicalExpression * ExpressionLogicalExpressionGrammarAction(int expression);
 tLogicalExpression * ClassMethodLogicalExpressionGrammarAction(tClassMethod * classMethod);
 
-tParamList * ParamListGrammarAction(tDataValue * value);
-tParamList * MultipleParamListGrammarAction(tDataValue * dataVal, tParamList * paramList);
+tParamList * ParamListGrammarAction(char * attrName, tDataValue * value);
+tParamList * MultipleParamListGrammarAction(char * attrName, tDataValue * dataVal, tParamList * paramList);
 
 
 tClassMethod * MethodsAndVarNameGrammarAction(char * className, MethodType method, char * varName);
@@ -118,5 +120,9 @@ MethodType DeleteGrammarAction();
 MethodType AvgGrammarAction();
 MethodType MinGrammarAction();
 MethodType MaxGrammarAction();
+
+tAttrDeclaration * ClassAttrDecGrammarAction(tDataType * dataType, char * varName);
+tAttrList * MultipleAttrDecGrammarAction(tAttrDeclaration * attrDec, tAttrList *next);
+tAttrList * AttrDecGrammarAction(tAttrDeclaration * attrDec);
 
 #endif
