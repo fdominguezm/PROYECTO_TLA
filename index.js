@@ -1,45 +1,27 @@
-const { Client } = require('pg')
+import { Sequelize, Model, DataTypes } from 'sequelize';
 
-const connectionData = {
-  username: 'benjamacbook',
-  password: '427027',
-  database: 'prueba_tla',
-  host: 'localhost',
-  port: 5432
-}
+const user = 'benjamacbook'
+const host = 'localhost'
+const database = 'prueba_tla'
+const password = ''
+const port = '5432'
 
-const client = new Client(connectionData)
 
-client.connect().then()
-
-client.query('SELECT * FROM auto', (err, res) => {
-  console.log(err ? err.stack : res) // Hello World!
+const sequelize = new (database, user, password, {
+  host,
+  port,
+  dialect: 'postgres',
+  logging: (...msg) => consoleg.log(msg),
 })
 
-client.query("INSERT INTO auto(modelo, marca) VALUES (2002, 'gol')", (err, res) => {
-  console.log((err ? err.stack : res))
-})
+const Auto = sequelize.define('Autos', {
+  marca: {
+    type: DataTypes.STRING,
+  },
+  anio: {
+    type: DataTypes.INTEGER,
+  }
+});
 
-client.query('SELECT * FROM auto', (err, res) => {
-  console.log(err ? err.stack : res.rows) // Hello World!
-})
-
-client.query('delete from auto', (err, res) => {
-  console.log(err ? err.stack : res);
-  client.end()
-})
-
-function createTable(name, varObj) {
-
-}
-
-function insertTable(tableName, values) {
-
-}
-
-insertTable(tableName, )
-
-client.query("CREATE TABLE House(price INTEGER, street VARCHAR", (err, res) => {
-  console.log(err ? err.stack : res)
-  client.end()
-})
+const mio = Auto.build({marca:"peugeot", anio:207});
+await mio.save();
