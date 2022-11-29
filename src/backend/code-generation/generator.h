@@ -14,7 +14,6 @@ void generateInstanceAttribute(tInstanceAtt * node);
 void generateAttrList(tAttrList * node) ;
 void generateAttrDeclaration(tAttrDeclaration * node);
 void generateClassMethod(tClassMethod * node);
-void generateVarList(tVarList * node);
 void generateVarDeclaration(tVarDeclaration * node);
 void generateParamList(tParamList * node);
 void generateVarEquals(tVarEquals * node);

@@ -47,15 +47,10 @@ tClassList * ClassDeclarationGrammarAction(tClassDeclaration *classDeclaration);
 tClassList * MultipleClassDeclarationGrammarAction(tClassDeclaration *classDeclaration,tClassList* next);
 
 
-tClassDeclaration * VarListGrammarAction(char * className,tAttrList * attrList);
+tClassDeclaration * ClassAttrListGrammarAction(char * className,tAttrList * attrList);
 
 
 tInstanceAtt * InstanceAttributeGrammarAction(char * instanceName, char * varName);
-
-
-tVarList * VarDeclarationGrammarAction(tVarDeclaration *varDec);
-tVarList * MultipleVarDeclarationGrammarAction(tVarDeclaration *varDec,tVarList *next);
-
 
 tVarDeclaration * DataTypeVarNameAndVarEqualsGrammarAction(tDataType * dataType, char * varName, tVarEquals *varEquals);
 tVarDeclaration * VarNameParamListGrammarAction(char * className,char * varName,tParamList * paramList);

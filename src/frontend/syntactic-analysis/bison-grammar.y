@@ -27,7 +27,6 @@
 	tAttrList * attrList;
 	tAttrDeclaration * attrDeclaration;
 
-	// tVarList* varList;
 	tVarDeclaration *varDeclaration;
 	tVarEquals *varEquals;
 	
@@ -122,7 +121,6 @@
 %type <classList> classList
 %type <classDeclaration> classDeclaration
 %type <instanceAttribute> instanceAttribute
-// %type <varList> varList
 %type <paramList> paramList
 %type <varDeclaration> varDeclaration
 %type <varEquals> varEquals
@@ -164,7 +162,7 @@ classList: classDeclaration																	{ $$ = ClassDeclarationGrammarAction
 	| classDeclaration classList															{ $$ = MultipleClassDeclarationGrammarAction($1,$2);}									
 	;
 
-classDeclaration: CAPITALIZED_NAME OPEN_BRACKET attrList CLOSE_BRACKET								{ $$ = VarListGrammarAction($1,$3);}
+classDeclaration: CAPITALIZED_NAME OPEN_BRACKET attrList CLOSE_BRACKET								{ $$ = ClassAttrListGrammarAction($1,$3);}
 	;
 
 
@@ -179,10 +177,6 @@ attrList: attrDeclaration																					{$$ = AttrDecGrammarAction($1);}
 	;
 
 attrDeclaration: dataType ALPHANUMERIC_NAME SEMI_COLON 														{$$ = ClassAttrDecGrammarAction($1, $2);}
-
-// varList: varDeclaration 																	{ $$ = VarDeclarationGrammarAction($1); }
-// 	| varDeclaration varList																{ $$ = MultipleVarDeclarationGrammarAction($1,$2);}
-// 	;
 
 varDeclaration: dataType ALPHANUMERIC_NAME SEMI_COLON 															{ $$ = DataTypeAndVarNameGrammarAction($1,$2);}
 	| dataType ALPHANUMERIC_NAME varEquals SEMI_COLON															{ $$ = DataTypeVarNameAndVarEqualsGrammarAction($1,$2,$3);}

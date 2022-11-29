@@ -103,18 +103,6 @@ void generateClassMethod(tClassMethod * node){
 	}
 }
 
-void generateVarList(tVarList * node) {
-	LogDebug("\tgenerateVarList()");	
-	fprintf(fd,"{\n");
-	generateVarDeclaration(node->varDeclaration);
-	if (node->type == MULTIPLE_VAR_DECLARATION) {
-		fprintf(fd,",");
-		generateVarList(node->next);
-	} else {
-		fprintf(fd,"});\n");
-	}
-}
-
 void generateVarDeclaration(tVarDeclaration * node) {
 	LogDebug("\tgenerateVarDeclaration()");	
 	fprintf(fd,"const %s", node->varName);

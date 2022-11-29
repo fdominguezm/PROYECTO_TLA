@@ -132,8 +132,8 @@ tClassList * MultipleClassDeclarationGrammarAction(tClassDeclaration * classDecl
 	return res;
 }
 
-tClassDeclaration * VarListGrammarAction(char * className, tAttrList * attrList){
-	LogDebug("\tVarListGrammarAction()");
+tClassDeclaration * ClassAttrListGrammarAction(char * className, tAttrList * attrList){
+	LogDebug("\tClassAttrListGrammarAction()");
 	tClassDeclaration * res = calloc(BLOCK, sizeof(tClassDeclaration));
 	if (res == NULL) {
 		return NULL;
@@ -163,29 +163,6 @@ tClassMethod * MethodsAndVarNameGrammarAction(char * className, MethodType  meth
 	res->className = className;
 	res->method = method;
 	res->arguments = arguments;
-	return res;
-}
-
-tVarList * VarDeclarationGrammarAction(tVarDeclaration * varDec){
-	LogDebug("\tVarDeclarationGrammarAction()");
-	tVarList * res = calloc(BLOCK, sizeof(tVarList));
-	if (res == NULL) {
-		return NULL;
-	}
-	res->varDeclaration = varDec;
-	res->type = SINGLE_VAR_DECLARATION;
-	return res;
-}
-
-tVarList * MultipleVarDeclarationGrammarAction(tVarDeclaration * varDec,tVarList * next){
-	LogDebug("\tMultipleVarDeclarationGrammarAction()");
-	tVarList * res = calloc(BLOCK, sizeof(tVarList));
-	if (res == NULL) {
-		return NULL;
-	}
-	res->varDeclaration = varDec;
-	res->next = next;
-	res->type = MULTIPLE_VAR_DECLARATION;
 	return res;
 }
 

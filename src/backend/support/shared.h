@@ -229,17 +229,6 @@ typedef struct tVarDeclaration{
 	VarDeclarationType type;
 }tVarDeclaration;
 
-typedef enum VarListType {
-	SINGLE_VAR_DECLARATION,
-	MULTIPLE_VAR_DECLARATION
-} VarListType;
-
-typedef struct tVarList{
-	tVarDeclaration * varDeclaration;
-	struct tVarList * next;
-	VarListType type;
-}tVarList;
-
 typedef struct tAttrDeclaration{
 	tDataType * dataType;
 	char * varName;
