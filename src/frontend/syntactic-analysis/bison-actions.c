@@ -272,6 +272,7 @@ tVarEquals * VarEqDataValueGrammarAction(tDataValue * dataVal){
 		return NULL;
 	}
 	res->val = dataVal;
+	res->type = VAREQ_DATA_VALUE;
 	return res;
 }
 

@@ -85,7 +85,8 @@ typedef struct tDataValue{
 typedef enum VarEqualsType {
 	VAREQ_INSTANCE_ATT,
 	VAREQ_VAR_NAME,
-	VAREQ_CLASS_METHOD
+	VAREQ_CLASS_METHOD,
+	VAREQ_DATA_VALUE
 } VarEqualsType;
 
 typedef struct tVarEquals{
@@ -159,6 +160,7 @@ typedef enum CodeComponentType {
 	CLASS_METHOD_COMPONENT,
 	COMMENT_COMPONENT
 } CodeComponentType;
+
 typedef struct tCodeComponents{
 	tWhileStatement * whileStatement;
 	tIfStatement * ifStatement;

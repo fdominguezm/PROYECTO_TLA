@@ -1,6 +1,10 @@
 #ifndef GENERATOR_HEADER
 #define GENERATOR_HEADER
 
-void Generator(int result);
+#include "../support/logger.h"
+#include "../../backend/support/shared.h"
+#include <stdio.h>
+
+void Generator(tProgram *  result);
 
 #endif
