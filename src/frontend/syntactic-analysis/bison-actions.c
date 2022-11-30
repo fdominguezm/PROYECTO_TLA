@@ -299,7 +299,7 @@ tLogicalExpression * InstanceAttLogicalExpressionGrammarAction(tInstanceAtt * in
 		return NULL;
 	} 
 	res->instanceAtt = instanceAtt;
-	INSTANCE_ATT_LOGEX;
+	res->type= INSTANCE_ATT_LOGEX;
 	return res;
 }
 tLogicalExpression * DataValueLogicalExpressionGrammarAction(tDataValue * value){

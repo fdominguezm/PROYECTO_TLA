@@ -76,6 +76,7 @@ void generateAttrDeclaration(tAttrDeclaration * node) {
 			fprintf(fd, "%s: DataTypes.INTEGER", node->varName);			
 			break;
 	}
+	fprintf(fd,",");
 }
 
 void generateClassMethod(tClassMethod * node){
@@ -105,15 +106,14 @@ void generateClassMethod(tClassMethod * node){
 
 void generateVarDeclaration(tVarDeclaration * node) {
 	LogDebug("\tgenerateVarDeclaration()");	
-	fprintf(fd,"const %s", node->varName);
-	if (node->type == VARDEC_VARNAME_DATATYPE)
-	{
-		fprintf(fd,";\n");
-	}else if(node->type == VARDEC_CLASSNAME_VARNAME_PARAMLIST){
+	fprintf(fd,"let %s", node->varName);
+	if(node->type == VARDEC_CLASSNAME_VARNAME_PARAMLIST){
 		fprintf(fd," = await %s.create({", node->className);
+		generateParamList(node->paramList);
 	}else if(node->type = VARDEC_DATATYPE_VARNAME_VAREQ){
 		generateVarEquals(node->varEq);
 	}
+	fprintf(fd,";\n");
 }
 
 
@@ -121,7 +121,7 @@ void generateParamList(tParamList * node){
 	LogDebug("\tgenerateParamList()");	
 	if (node == NULL)
 	{
-		fprintf(fd, "});\n");
+		fprintf(fd, "})");
 		return;
 	}
 	fprintf(fd,"%s: ", node->attrName);
@@ -281,7 +281,12 @@ void generateLogicalExpression(tLogicalExpression * node) {
 }
 
 void generateDataValue(tDataValue * node){
-	LogDebug("\tgenerateDataValue()");	
+	LogDebug("\tgenerateDataValue()");
+	if (node == NULL)
+	{
+		return;
+	}
+		
 	switch (node->type)
 	{
 		case BOOLEAN_VAL:
@@ -299,4 +304,5 @@ void generateDataValue(tDataValue * node){
 		default:
 			break;
 	}
+	LogDebug("\t LLEGO AL FINAL");
 }

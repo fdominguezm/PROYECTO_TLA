@@ -5,9 +5,9 @@ CLASSES {
     }
 }
 
-Auto auto1 = new Auto("CRV", 2020);
-Auto auto2 = new Auto("CRV", 2019);
-Auto auto3 = new Auto("CRV", 2012);
-Auto auto4 = new Auto("CRV", 2017);
+Auto auto1 = new Auto(modelo:"CRV", anio:2020);
+Auto auto2 = new Auto(modelo:"CRV", anio:2019);
+Auto auto3 = new Auto(modelo:"CRV", anio:2012);
+Auto auto4 = new Auto(modelo:"CRV", anio:2017);
 
 int average = Auto.avg(anio);

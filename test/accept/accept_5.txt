@@ -6,7 +6,7 @@ CLASSES {
   }
 }
 
-Person benja = new Person("Benja", 23, false);
-Person juan = new Person("juan", 22, false);
+Person benja = new Person(name:"Benja", age:23, married:false);
+Person juan = new Person(name:"juan", age:22, married:false);
 
 Person.max(age);

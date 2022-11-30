@@ -4,4 +4,4 @@ CLASSES{
     }
 }
 
-Auto.AVG("modelo");
+Auto.AVG(anio:"modelo");

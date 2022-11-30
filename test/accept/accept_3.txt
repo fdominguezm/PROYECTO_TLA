@@ -8,10 +8,10 @@ CLASSES {
     }
 }
 
-Celular cel1 = new Celular("Nokia", 1000, 2020, "1234-5678", true);
-Celular cel2 = new Celular("Motorola", 2000, 2015, "8765-4321", false);
-Celular cel3 = new Celular("Apple", 3000, 2012, "5678-1234", true);
-Celular cel4 = new Celular("Samsung", 4000, 2005, "1234-4321", false);
+Celular cel1 = new Celular(marca:"Nokia", precio:1000, anio:2020, numero:"1234-5678", habilitado:true);
+Celular cel2 = new Celular(marca:"Motorola", precio:2000, anio:2015, numero:"8765-4321", habilitado:false);
+Celular cel3 = new Celular(marca:"Apple", precio:3000, anio:2012, numero:"5678-1234", habilitado:true);
+Celular cel4 = new Celular(marca:"Samsung", precio:4000, anio:2005, numero:"1234-4321", habilitado:false);
 
 int minAnio = Celular.min(anio);
 

@@ -8,6 +8,6 @@ CLASSES {
 
 int a = 28;
 
-Person aPerson = new Person("Benja", 23, false);
+Person aPerson = new Person(name: "Benja", age: 23, married: false);
 
-Person bPerson = new Person("Chule", 21, false);
+Person bPerson = new Person(name: "Chule", age: 21, married: false);

@@ -5,4 +5,4 @@ CLASSES{
 
 }
 
-TV tv1 = new TV(2022, "LG");
+TV tv1 = new TV(anio:2022, marca:"LG");
