@@ -11,13 +11,28 @@ CLASSES {
         string modelo;
         int anio;
     }
+    User {
+        int age;
+        string name;
+        int street;
+    }
 }
 
 Auto a1 = new Auto(modelo: "peugeout 207", anio:2013);
 Auto a2 = new Auto(modelo: "citroen c3", anio: 2020);
 
+
+
+User u1 = new User(name: "benja", age:1999, street:20);
+User u2 = new User(name: "agustin", age: 2020, street:40);
+
 int h = 3;
 
-a2.anio = 10;
+a2.anio = u1.age;
+
+u2.name = "chule";
+
+int maxage = User.max(age);
+a1.anio = maxage;
 
 string b = a1.modelo;

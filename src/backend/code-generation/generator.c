@@ -101,9 +101,9 @@ void generateInstanceAttribute(tInstanceAtt * node){
 	LogDebug("\tgenerateInstanceAttribute()");
 	fprintf(fd, "%s.%s", node->instanceName, node->varName);
 	if (node->varEq != NULL) {
-		LogDebug("en el varequelas este");
 		fprintf(fd, " = ");
 		generateVarEquals(node->varEq);
+		fprintf(fd, "%s.save();\n", node->instanceName);
 	}
 }
 
@@ -168,7 +168,7 @@ void generateVarDeclaration(tVarDeclaration * node) {
 
 	switch (node->type) {
 		case VARDEC_CLASSNAME_VARNAME_PARAMLIST:
-			fprintf(fd," = %s.create({", node->className);
+			fprintf(fd," = await %s.create({", node->className);
 			generateParamList(node->paramList);
 			fprintf(fd, "});\n");
 			fprintf(fd, "await %s.sync();\n", node->className); 
