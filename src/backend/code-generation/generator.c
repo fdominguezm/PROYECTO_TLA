@@ -2,6 +2,7 @@
 
 
 FILE * fd;
+FILE * fd_config;
 
 /**
  * Implementación de "generator.h".
@@ -14,26 +15,65 @@ void Generator(tProgram * node) {
 	const char * file_name = "output.js";
 	fd = fopen(file_name, "w+");
 
-	generateSetup();
+	if (node->credentialSection != NULL) {
+		fd_config = fopen("configprueba.js", "w+");
+		generateSetup(node->credentialSection);
+		fclose(fd_config);
+	} else {
+		LogDebug("\t sin credenciales");
+	}
 
-	generateClassSection(node->classSection);
 	if (node->classSection != NULL) {
+		generateClassSection(node->classSection);
 	} else {
 		LogDebug("no habia clases");
 	}
 
-	generateCodeSection(node->codeSection);
+	if (node->codeSection != NULL) {
+		generateCodeSection(node->codeSection);
+	} else {
+		LogDebug("\t sin codigo");
+	}
 
 	generateExit();
+	fclose(fd);
 }
 
 void generateExit() {
+	LogDebug("\tgenerateExit()");
 	fprintf(fd, "await sequelize.sync();\n");
 	fprintf(fd, "await sequelize.close();\n");
 }
 
-void generateSetup() {
+void generateSetup(tCredentialsSection * credentials) {
+	LogDebug("\tgenerateSetup()");
+
+	generateConfig(credentials);
 	fprintf(fd, "import { sequelize, DataTypes } from './config.js';\n");
+}
+
+void generateConfig(tCredentialsSection * credentials) {
+	LogDebug("\tgenerateConfig");
+	fprintf(fd_config, "import { Sequelize, DataTypes } from 'sequelize';\n");
+
+	tCredentialList * list = credentials->credentialList;
+	tCredentialDefinition * def = NULL;
+
+	while (list) {
+		def = list->credentialDefinition;
+
+		if (def != NULL) {
+			fprintf(fd_config, "const %s = ", def->campo);
+			generateDataValue(def->dataValue, fd_config);
+			fprintf(fd_config, ";\n");
+		}
+
+		list = list->next;
+	}
+
+	fprintf(fd_config, "const sequelize = new Sequelize(database, user, password,\n");
+	fprintf(fd_config, "{host, port, dialect: 'postgres', logging: (...msg) => console.log(msg)})\n");
+	fprintf(fd_config, "export { sequelize, DataTypes }");
 }
 
 void generateClassSection(tClassSection * node){
@@ -59,20 +99,18 @@ void generateClassDeclaration(tClassDeclaration * node) {
 
 void generateInstanceAttribute(tInstanceAtt * node){
 	LogDebug("\tgenerateInstanceAttribute()");
-	if (node->varEq != NULL)
-	{
-		fprintf(fd, "%s.%s", node->instanceName, node->varName);
-		generateVarEquals(node->varEq);
-		return;
-	}
 	fprintf(fd, "%s.%s", node->instanceName, node->varName);
-	fprintf(fd, ";\n");
+	if (node->varEq != NULL) {
+		LogDebug("en el varequelas este");
+		fprintf(fd, " = ");
+		generateVarEquals(node->varEq);
+	}
 }
 
 void generateAttrList(tAttrList * node) {
 	LogDebug("\tgenerateAttrList()");
 	if (node == NULL) {
-		fprintf(fd,"});\n");
+		fprintf(fd,"}, {freezeTableName:true});\n");
 		return;
 	}
 	generateAttrDeclaration(node->attrDeclaration);
@@ -133,7 +171,7 @@ void generateVarDeclaration(tVarDeclaration * node) {
 			fprintf(fd," = %s.create({", node->className);
 			generateParamList(node->paramList);
 			fprintf(fd, "});\n");
-			fprintf(fd, "await %s.sync()", node->className); 
+			fprintf(fd, "await %s.sync();\n", node->className); 
 			break;
 		case VARDEC_DATATYPE_VARNAME_VAREQ:
 			fprintf(fd, " = ");
@@ -144,7 +182,6 @@ void generateVarDeclaration(tVarDeclaration * node) {
 		default:
 			break;
 	}
-	fprintf(fd,";\n");
 }
 
 
@@ -154,7 +191,7 @@ void generateParamList(tParamList * node){
 	switch (node->type)
 	{
 	case PARAM_VALUE:
-		generateDataValue(node->value);
+		generateDataValue(node->value, fd);
 		break;
 	case PARAM_VAR:
 		fprintf(fd, "%s", node->varName);
@@ -184,12 +221,13 @@ void generateVarEquals(tVarEquals * node){
 		break;
 
 	case VAREQ_DATA_VALUE:
-		generateDataValue(node->val);
+		generateDataValue(node->val, fd);
 		break;		
 
 	default:
 		break;
 	}
+	fprintf(fd, ";\n");
 }
 
 void generateCodeSection(tCodeSection * node) {
@@ -238,7 +276,6 @@ void generateCodeComponents(tCodeComponents * node) {
 	case COMMENT_COMPONENT:
 		/*comentario*/
 		break;
-
 	default:
 		break;
 	}
@@ -304,7 +341,7 @@ void generateLogicalExpression(tLogicalExpression * node) {
 			break;
 		
 		case DATA_VAL_LOGEX:
-			generateDataValue(node->dataValue); 
+			generateDataValue(node->dataValue, fd); 
 			break;
 
 		case CLASS_METHOD_LOGEX:
@@ -316,7 +353,7 @@ void generateLogicalExpression(tLogicalExpression * node) {
 	}
 }
 
-void generateDataValue(tDataValue * node){
+void generateDataValue(tDataValue * node, FILE * file){
 	LogDebug("\tgenerateDataValue()");
 	if (node == NULL)
 	{
@@ -326,15 +363,15 @@ void generateDataValue(tDataValue * node){
 	switch (node->type)
 	{
 		case BOOLEAN_VAL:
-			fprintf(fd,"%s", node->boolVal == true ? "true" : "false");
+			fprintf(file,"%s", node->boolVal == true ? "true" : "false");
 			break;
 
 		case STRING_VAL:
-			fprintf(fd,"'%s'", node->stringVal);
+			fprintf(file,"'%s'", node->stringVal);
 			break;
 
 		case INTEGER_VAL:
-			fprintf(fd,"%d", node->integerVal);
+			fprintf(file,"%d", node->integerVal);
 			break;
 
 		default:

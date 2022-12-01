@@ -1,20 +1,12 @@
-CLASSES {
-      Auto {
-        string modelo;
-        int anio;
+CLASSES{
+    A{
+        int a;
     }
 }
 
-int a = 3;
+A a1 = new A(a:3);
 
-if (a > 2) {
-    Auto a1 = new Auto(modelo:"peugeot", anio:2009);
-} else if (b == 2) {
-    int h = 10;
-} else {
-    string benja = "beeenjaaa";
-}
-
-while (i < 10) {
-    int j = 10;
+int b = 5;
+while (a1.age > 2) {
+    b = 8;
 }

@@ -113,6 +113,12 @@ token ClassDefinitionsPatternAction(const char * lexeme) {
 	return CLASS_SECTION;
 }
 
+token CredentialsPatternAction(const char * lexeme) {
+	LogDebug("CredentialsPatternAction: '%s'.", lexeme);
+	yylval.token = CREDENTIALS_SECTION;
+	return CREDENTIALS_SECTION;
+}
+
 token DataTypePatternAction(const char * lexeme) {
 	LogDebug("DataTypePatternAction: '%s'.", lexeme);
 	

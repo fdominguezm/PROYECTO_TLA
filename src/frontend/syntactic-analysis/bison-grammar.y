@@ -18,6 +18,10 @@ Program program;
 	// No-terminales (frontend).
 	tProgram * program;
 
+	tCredentialsSection * credentialsSection;
+	tCredentialList * credentialList;
+	tCredentialDefinition * credentialDefinition;
+
 	tClassSection *classSection;
 	tClassList *classList;
 	tClassDeclaration *classDeclaration;
@@ -84,6 +88,8 @@ Program program;
 %token <stringToken> COLON
 
 %token <stringToken> CLASS_SECTION 
+%token <stringToken> CREDENTIALS_SECTION
+
 %token <stringToken> NEW
 %token <stringToken> RETURN
 
@@ -117,6 +123,11 @@ Program program;
 // %type <expression> expression
 // %type <factor> factor
 // %type <constant> constant
+
+%type <credentialsSection> credentialsSection
+%type <credentialList> credentialList
+%type <credentialDefinition> credentialDefinition
+
 %type <classSection> classSection
 %type <classList> classList
 %type <classDeclaration> classDeclaration
@@ -152,8 +163,17 @@ Program program;
 
 %%
 
-program: classSection codeSection															{ $$ = ProgramGrammarAction($1,$2); }	
+program: credentialsSection classSection codeSection															{ $$ = ProgramGrammarAction($1,$2,$3); }	
 	;
+
+credentialsSection: %empty	{$$ = NULL;}
+	| CREDENTIALS_SECTION OPEN_BRACKET credentialList CLOSE_BRACKET { $$ = CredentialsSectionGrammarAction($3); }
+	;
+
+credentialList: credentialDefinition																					{ $$ = MultipleCredentialListGrammarAction($1, NULL); }
+	| credentialDefinition credentialList																				{ $$ = MultipleCredentialListGrammarAction($1, $2); }
+
+credentialDefinition: ALPHANUMERIC_NAME EQ dataValue SEMI_COLON						{ $$ = CredentialDefinitionGrammarAction($1, $3);}
 
 classSection: CLASS_SECTION OPEN_BRACKET classList CLOSE_BRACKET							{ $$ = ClassListGrammarAction($3); }	 
 	;
@@ -206,7 +226,8 @@ dataType: INTEGER 																			{ $$ = IntTypeGrammarAction($1); }
 	| BOOLEAN																				{ $$ = BoolTypeGrammarAction($1); }
 	;
 
-codeSection: codeList																		{ $$ = CodeListGrammarAction($1); }
+codeSection: %empty {$$ = NULL; }
+	| codeList																		{ $$ = CodeListGrammarAction($1); }
 	;
 
 codeList: codeComponents 																	{ $$ = CodeComponentsGrammarAction($1); }

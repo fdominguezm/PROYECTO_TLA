@@ -8,6 +8,7 @@
 
 void Generator(tProgram *  result);
 void generateSetup();
+void generateConfig(tCredentialsSection * credentials);
 void generateExit();
 void generateClassSection(tClassSection * node);
 void generateClassList(tClassList * node);
@@ -26,7 +27,7 @@ void generateWhileStatement(tWhileStatement * node);
 void generateIfStatement(tIfStatement * node);
 void generateElseStatement(tElseStatement * node);
 void generateLogicalExpression(tLogicalExpression * node);
-void generateDataValue(tDataValue * node);
+void generateDataValue(tDataValue * node, FILE * file);
 
 
 #endif

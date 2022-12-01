@@ -35,6 +35,7 @@ token CapitalizedWordPatternAction(const char * lexeme, int length);
 
 token AlphanumericWordPatternAction(const char * lexeme, int length);
 
+token CredentialsPatternAction(const char * lexeme);
 token ClassDefinitionsPatternAction(const char * lexeme);
 token DataTypePatternAction(const char * lexeme);
 

@@ -14,7 +14,7 @@
  */
 
 // Programa.
-tProgram * ProgramGrammarAction(tClassSection * claSection, tCodeSection *codeSection);
+tProgram * ProgramGrammarAction(tCredentialsSection * credentialsSection, tClassSection * classSection, tCodeSection * codeSection);
 
 // Expresión.
 int AdditionExpressionGrammarAction(const int leftValue, const int rightValue);
@@ -39,6 +39,9 @@ int StringGrammarAction();
 int BooleanGrammarAction();
 
 
+tCredentialsSection * CredentialsSectionGrammarAction(tCredentialList * credentialList);
+tCredentialList * MultipleCredentialListGrammarAction(tCredentialDefinition * credentialDefinition, tCredentialList * credentialList);
+tCredentialDefinition * CredentialDefinitionGrammarAction(char * campo, tDataValue * dataValue);
 
 tClassSection * ClassListGrammarAction(tClassList *classList);
 

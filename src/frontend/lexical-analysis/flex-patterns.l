@@ -35,6 +35,9 @@ whitespace		[ \f\n\r\t\v]
 <STRING>"\""                                { EndStringPatternAction(); BEGIN(INITIAL); }
 
 "CLASSES"                                   { return ClassDefinitionsPatternAction(yytext); }
+"CREDENTIALS"                               { return CredentialsPatternAction(yytext); }
+
+
 
 "int"|"string"|"bool"                       { return DataTypePatternAction(yytext); }
 "new"                                       { return NewKeywordPatternAction(yytext); }

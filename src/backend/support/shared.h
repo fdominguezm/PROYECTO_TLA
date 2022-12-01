@@ -256,6 +256,20 @@ typedef struct tAttrList{
 	struct tAttrList * next;
 }tAttrList;
 
+typedef struct tCredentialDefinition {
+	char * campo;
+	tDataValue * dataValue;
+} tCredentialDefinition;
+
+typedef struct tCredentialList {
+	tCredentialDefinition * credentialDefinition;
+	struct tCredentialList * next;
+} tCredentialList;
+
+typedef struct tCredentialsSection {
+	tCredentialList * credentialList;
+} tCredentialsSection;
+
 typedef struct tClassDeclaration
 {
 	char * className;
@@ -280,6 +294,7 @@ typedef struct tClassSection{
 } tClassSection;
 
 typedef struct tProgram{
+	tCredentialsSection * credentialSection;
 	tClassSection * classSection;
 	tCodeSection * codeSection;
 }tProgram;

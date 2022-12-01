@@ -30,13 +30,14 @@ void yyerror(const char * string) {
 * indica que efectivamente el programa de entrada se pudo generar con esta
 * gramática, o lo que es lo mismo, que el programa pertenece al lenguaje.
 */
-tProgram * ProgramGrammarAction(tClassSection * classSection, tCodeSection * codeSection) {
+tProgram * ProgramGrammarAction(tCredentialsSection * credentialsSection, tClassSection * classSection, tCodeSection * codeSection) {
 	LogDebug("Reconozco patrón. ProgramGrammarAction()");
 	tProgram * value = calloc(BLOCK, sizeof(tProgram));
 	if (value == NULL)
 	{
 		return value;
 	}
+	value->credentialSection = credentialsSection;
 	value->classSection = classSection;
 	value->codeSection = codeSection;
 	
@@ -95,6 +96,35 @@ int ConstantFactorGrammarAction(const int value) {
 int IntegerConstantGrammarAction(const int value) {
 	LogDebug("\tIntegerConstantGrammarAction(%d)", value);
 	return value;
+}
+
+tCredentialsSection * CredentialsSectionGrammarAction(tCredentialList * credentialList) {
+	tCredentialsSection * res = (tCredentialsSection *) calloc(BLOCK, sizeof(tCredentialsSection));
+	if (res == NULL) {
+		return NULL;
+	}
+	res->credentialList = credentialList;
+	return res;
+}
+
+tCredentialList * MultipleCredentialListGrammarAction(tCredentialDefinition * credentialDefinition, tCredentialList * credentialList) {
+	tCredentialList * res = (tCredentialList *) calloc(BLOCK, sizeof(tCredentialList));
+	if (res == NULL) {
+		return NULL;
+	}
+	res->credentialDefinition = credentialDefinition;
+	res->next = credentialList;
+	return res;
+}
+
+tCredentialDefinition * CredentialDefinitionGrammarAction(char * campo, tDataValue * dataValue) {
+	tCredentialDefinition * res = (tCredentialDefinition *) calloc(BLOCK, sizeof(tCredentialDefinition));
+	if (res == NULL) {
+		return NULL;
+	}
+	res->campo = campo;
+	res->dataValue = dataValue;
+	return res;
 }
 
 tClassSection * ClassListGrammarAction(tClassList * classList) {
@@ -535,6 +565,7 @@ tCodeComponents * InstanceAttributeEqualGrammarAction(tInstanceAtt * instanceAtt
 	}
 	res->type = INSTANCE_ATTRIBUTE_COMPONENT;
 	res->instanceAtt = instanceAtt;
+	res->instanceAtt->varEq = varEq;
 	res->varEq = varEq;
 	return res;
 }
@@ -582,6 +613,7 @@ tElseStatement * EmptyGrammarAction(){
 	res->type = ELSE_EMPTY;
 	return NULL;
 }
+
 tElseStatement * ElseIfGrammarAction(tIfStatement * ifStatement) {
 	LogDebug("\tElseIfGrammarAction()");
 	tElseStatement * res = calloc(BLOCK, sizeof(tElseStatement));

@@ -4,9 +4,9 @@ CLASSES{
     }
 }
 
-A a = new A(a:8);
+A a1 = new A(a:3);
 
-while (a > 0)
-{
-    a = 0;
+let b = 5;
+while (a1.age > 2) {
+    b = 8;
 }
