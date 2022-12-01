@@ -1,12 +1,23 @@
-CLASSES{
-    A{
-        int a;
+CREDENTIALS {
+    user = "benjamacbook";
+    host = "localhost";
+    database = "prueba_tla";
+    password = "lapa";
+    port = 5432;
+}
+
+CLASSES {
+    Auto {
+        string modelo;
+        int anio;
     }
 }
 
-A a1 = new A(a:3);
+Auto a1 = new Auto(modelo: "peugeout 207", anio:2013);
+Auto a2 = new Auto(modelo: "citroen c3", anio: 2020);
 
-int b = 5;
-while (a1.age > 2) {
-    b = 8;
-}
+int h = 3;
+
+a2.anio = 10;
+
+string b = a1.modelo;

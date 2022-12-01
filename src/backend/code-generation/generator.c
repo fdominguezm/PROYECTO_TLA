@@ -16,7 +16,7 @@ void Generator(tProgram * node) {
 	fd = fopen(file_name, "w+");
 
 	if (node->credentialSection != NULL) {
-		fd_config = fopen("configprueba.js", "w+");
+		fd_config = fopen("config.js", "w+");
 		generateSetup(node->credentialSection);
 		fclose(fd_config);
 	} else {
