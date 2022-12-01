@@ -105,8 +105,14 @@ tLogicalExpression * DataValueLogicalExpressionGrammarAction(tDataValue * value)
 tLogicalExpression * ExpressionLogicalExpressionGrammarAction(int expression);
 tLogicalExpression * ClassMethodLogicalExpressionGrammarAction(tClassMethod * classMethod);
 
-tParamList * ParamListGrammarAction(char * attrName, tDataValue * value);
-tParamList * MultipleParamListGrammarAction(char * attrName, tDataValue * dataVal, tParamList * paramList);
+tParamList * ParamListValueGrammarAction(char * attrName, tDataValue * value);
+tParamList * MultipleParamListValueGrammarAction(char * attrName, tDataValue * dataVal, tParamList * paramList);
+tParamList * ParamListVarGrammarAction(char * attrName, char * varName);
+tParamList * MultipleParamListVarGrammarAction(char * attrName, char * varName, tParamList * paramList);
+
+
+
+
 
 
 tClassMethod * MethodsAndVarNameGrammarAction(char * className, MethodType method, char * varName);

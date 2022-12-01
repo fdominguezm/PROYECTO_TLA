@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "Compiler project for writing SQL queries from an object oriented language.",
   "main": "index.js",
+  "type": "module",
   "directories": {
     "test": "test"
   },
@@ -20,6 +21,8 @@
   },
   "homepage": "https://github.com/fdominguezm/PROYECTO_TLA#readme",
   "dependencies": {
-    "pg": "^8.8.0"
+    "pg": "^8.8.0",
+    "pg-hstore": "^2.3.4",
+    "sequelize": "^6.26.0"
   }
 }

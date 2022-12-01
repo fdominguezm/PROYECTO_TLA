@@ -132,26 +132,26 @@ token DataTypePatternAction(const char * lexeme) {
 
 token GreaterThanPatternAction(const char * lexeme) {
 	LogDebug("GreaterThanPatternAction: '%s'.", lexeme);
-	yylval.token = GT;
+	yylval.stringToken = ">";
 	return GT;
 }
 
 token LessThanPatternAction(const char * lexeme) {
 	LogDebug("LessThanPatternAction: '%s'.", lexeme);
-	yylval.token = LT;
+	yylval.stringToken = "<";
 	return LT;
 }
 
 
 token GreaterEqualThanPatternAction(const char * lexeme) {
 	LogDebug("GreaterEqualThanPatternAction: '%s'.", lexeme);
-	yylval.token = GTEQ;
+	yylval.stringToken = ">=";
 	return GTEQ;
 }
 
 token LessEqualThanPatternAction(const char * lexeme) {
 	LogDebug("LessEqualThanPatternAction: '%s'.", lexeme);
-	yylval.token = LTEQ;
+	yylval.stringToken = "<=";
 	return LTEQ;
 }
 
@@ -229,7 +229,7 @@ token FalseKeywordPatternAction(const char * lexeme) {
 
 token EqualEqualPatternAction(const char * lexeme) {
 	LogDebug("EqualEqualPatternAction: '%s'.", lexeme);
-	yylval.token = EQEQ;
+	yylval.stringToken = "==";
 	return EQEQ;	
 }
 
@@ -241,25 +241,27 @@ token EqualPatternAction(const char * lexeme) {
 
 token NotEqualPatternAction(const char * lexeme) {
 	LogDebug("NotEqualPatternAction: '%s'.", lexeme);
-	yylval.token = NOTEQ;
+	yylval.stringToken = "!=";
 	return NOTEQ;	
 }
 
 token AndPatternAction(const char * lexeme) {
 	LogDebug("AndPatternAction: '%s'.", lexeme);
-	yylval.token = AND;
+	yylval.stringToken = "&&";
 	return AND;
 }
 
 token OrPatternAction(const char * lexeme) {
 	LogDebug("OrPatternAction: '%s'.", lexeme);
-	yylval.token = OR;
+	yylval.stringToken = "||";
 	return OR;
 }
 
 token StringPatternAction(const char * lexeme, const int length) {
 	LogDebug("StringPatternAction: '%s'.", lexeme);
-	yylval.token = STRING_VALUE;
+	char * str = (char *) calloc(length + 1, sizeof(char));
+	strncpy(str, lexeme, length);
+	yylval.stringToken = str;
 	return STRING_VALUE;
 }
 

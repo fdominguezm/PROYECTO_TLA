@@ -1,0 +1,19 @@
+CLASSES {
+  House {
+    int price;
+    string street;
+  }
+  Car {
+    int wheels;
+    string brand;
+    int year;
+  }
+}
+
+string a = "prueba";
+
+int b = 15;
+
+int sinnada;  
+
+House aHouse = new House(price: 20000, street:"gaillard");

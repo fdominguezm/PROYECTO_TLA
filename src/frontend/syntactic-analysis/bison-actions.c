@@ -30,14 +30,14 @@ void yyerror(const char * string) {
 * indica que efectivamente el programa de entrada se pudo generar con esta
 * gramática, o lo que es lo mismo, que el programa pertenece al lenguaje.
 */
-tProgram * ProgramGrammarAction(tClassSection * claSection, tCodeSection * codeSection) {
+tProgram * ProgramGrammarAction(tClassSection * classSection, tCodeSection * codeSection) {
 	LogDebug("Reconozco patrón. ProgramGrammarAction()");
 	tProgram * value = calloc(BLOCK, sizeof(tProgram));
 	if (value == NULL)
 	{
 		return value;
 	}
-	value->classSection = claSection;
+	value->classSection = classSection;
 	value->codeSection = codeSection;
 	
 	/*
@@ -326,7 +326,7 @@ tLogicalExpression * ExpressionLogicalExpressionGrammarAction(int expression){
 	return res;
 }
 
-tParamList * ParamListGrammarAction(char * attrName,tDataValue * value){
+tParamList * ParamListValueGrammarAction(char * attrName,tDataValue * value){
 	LogDebug("\tParamListGrammarAction()");
 
 	tParamList * res = calloc(BLOCK, sizeof(tParamList));
@@ -336,12 +336,13 @@ tParamList * ParamListGrammarAction(char * attrName,tDataValue * value){
 	res->attrName = attrName;
 	res->value = value;
 	res->next = NULL;
+	res->type = PARAM_VALUE;
 
 	return res;	
 }
 
 
-tParamList * MultipleParamListGrammarAction(char * attrName,tDataValue * dataVal, tParamList * paramList){
+tParamList * MultipleParamListValueGrammarAction(char * attrName,tDataValue * dataVal, tParamList * paramList){
 	LogDebug("\tMultipleParamListGrammarAction()");
 
 	tParamList * res = calloc(BLOCK, sizeof(tParamList));
@@ -351,8 +352,38 @@ tParamList * MultipleParamListGrammarAction(char * attrName,tDataValue * dataVal
 	res->attrName = attrName;
 	res->value = dataVal;
 	res->next = paramList;
+	res->type = PARAM_VALUE;
 
 	return res;
+}
+
+tParamList * ParamListVarGrammarAction(char * attrName, char * varName) {
+		LogDebug("ParamListVarGrammarAction()");
+
+	tParamList * res = calloc(BLOCK, sizeof(tParamList));
+	if (res == NULL) {
+		return NULL;
+	} 
+	res->attrName = attrName;
+	res->varName = varName;
+	res->next = NULL;
+	res->type = PARAM_VAR;
+
+	return res;	
+}
+tParamList * MultipleParamListVarGrammarAction(char * attrName, char * varName, tParamList * paramList) {
+	LogDebug("ParamListVarGrammarAction()");
+
+	tParamList * res = calloc(BLOCK, sizeof(tParamList));
+	if (res == NULL) {
+		return NULL;
+	} 
+	res->attrName = attrName;
+	res->varName = varName;
+	res->next = paramList;
+	res->type = PARAM_VAR;
+
+	return res;	
 }
 
 tAttrList * AttrDecGrammarAction(tAttrDeclaration * attrDec) {

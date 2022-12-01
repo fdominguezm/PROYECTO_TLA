@@ -8,7 +8,7 @@
 %union {
 	// No-terminales (backend).
 	/*
-	Program program;
+Program program;
 	Expression expression;
 	Factor factor;
 	Constant constant;
@@ -189,8 +189,10 @@ dataValue: TRUEE																			{ $$ = TrueGrammarAction(); }
 	| INTEGER_VALUE																				{ $$ = IntegerValueGrammarAction($1); }
 	;
 
-paramList: ALPHANUMERIC_NAME COLON dataValue																		{ $$ = ParamListGrammarAction($1,$3); }
-	| ALPHANUMERIC_NAME COLON dataValue COMMA paramList																{ $$ = MultipleParamListGrammarAction($1,$3,$5); }
+paramList: ALPHANUMERIC_NAME COLON ALPHANUMERIC_NAME										{ $$ = ParamListVarGrammarAction($1, $3);}
+	| ALPHANUMERIC_NAME COLON ALPHANUMERIC_NAME COMMA paramList						{ $$ = MultipleParamListVarGrammarAction($1, $3, $5);}
+	| ALPHANUMERIC_NAME COLON dataValue																		{ $$ = ParamListValueGrammarAction($1,$3); }
+	| ALPHANUMERIC_NAME COLON dataValue COMMA paramList																{ $$ = MultipleParamListValueGrammarAction($1,$3,$5); }
 	;
 	
 varEquals:  EQ dataValue 														{ $$ = VarEqDataValueGrammarAction($2); }

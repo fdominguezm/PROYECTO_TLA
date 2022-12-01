@@ -10,11 +10,30 @@ FILE * fd;
 void Generator(tProgram * node) {
 	LogDebug("Generator\n");
 	
+	
 	const char * file_name = "output.js";
 	fd = fopen(file_name, "w+");
 
+	generateSetup();
+
 	generateClassSection(node->classSection);
+	if (node->classSection != NULL) {
+	} else {
+		LogDebug("no habia clases");
+	}
+
 	generateCodeSection(node->codeSection);
+
+	generateExit();
+}
+
+void generateExit() {
+	fprintf(fd, "await sequelize.sync();\n");
+	fprintf(fd, "await sequelize.close();\n");
+}
+
+void generateSetup() {
+	fprintf(fd, "import { sequelize, DataTypes } from './config.js';\n");
 }
 
 void generateClassSection(tClassSection * node){
@@ -35,6 +54,7 @@ void generateClassDeclaration(tClassDeclaration * node) {
 	LogDebug("\tgenerateClassDeclaration()");
 	fprintf(fd,"const %s = sequelize.define( \"%s\", {", node->className,node->className);
 	generateAttrList(node->attrList);
+	fprintf(fd, "await sequelize.sync({force: true});\n");
 }
 
 void generateInstanceAttribute(tInstanceAtt * node){
@@ -43,7 +63,6 @@ void generateInstanceAttribute(tInstanceAtt * node){
 	{
 		fprintf(fd, "%s.%s", node->instanceName, node->varName);
 		generateVarEquals(node->varEq);
-		fprintf(fd, "await %s.save();\n", node->instanceName);
 		return;
 	}
 	fprintf(fd, "%s.%s", node->instanceName, node->varName);
@@ -84,15 +103,15 @@ void generateClassMethod(tClassMethod * node){
 	switch (node->method)
 	{
 	case MAX_METHOD:
-		fprintf(fd, "await %s.max(%s);\n", node->className, node->arguments);
+		fprintf(fd, "await %s.max('%s')", node->className, node->arguments);
 		break;
 	
 	case MIN_METHOD:
-		fprintf(fd, "await %s.min(%s);\n", node->className, node->arguments);
+		fprintf(fd, "await %s.min('%s')", node->className, node->arguments);
 		break;
 	
 	case AVG_METHOD:
-		//fprintf para hacer n avg node->arguments de la tabla node->className
+		fprintf(fd, "await %s.sum('%s') / await %s.count('%s')", node->className, node->arguments, node->className, node->arguments);
 		break;
 
 	// case DELETE_METHOD:
@@ -106,12 +125,24 @@ void generateClassMethod(tClassMethod * node){
 
 void generateVarDeclaration(tVarDeclaration * node) {
 	LogDebug("\tgenerateVarDeclaration()");	
+
 	fprintf(fd,"let %s", node->varName);
-	if(node->type == VARDEC_CLASSNAME_VARNAME_PARAMLIST){
-		fprintf(fd," = await %s.create({", node->className);
-		generateParamList(node->paramList);
-	}else if(node->type = VARDEC_DATATYPE_VARNAME_VAREQ){
-		generateVarEquals(node->varEq);
+
+	switch (node->type) {
+		case VARDEC_CLASSNAME_VARNAME_PARAMLIST:
+			fprintf(fd," = %s.create({", node->className);
+			generateParamList(node->paramList);
+			fprintf(fd, "});\n");
+			fprintf(fd, "await %s.sync()", node->className); 
+			break;
+		case VARDEC_DATATYPE_VARNAME_VAREQ:
+			fprintf(fd, " = ");
+			generateVarEquals(node->varEq);
+			break;
+		case VARDEC_VARNAME_DATATYPE:
+			break;
+		default:
+			break;
 	}
 	fprintf(fd,";\n");
 }
@@ -119,23 +150,25 @@ void generateVarDeclaration(tVarDeclaration * node) {
 
 void generateParamList(tParamList * node){
 	LogDebug("\tgenerateParamList()");	
-	if (node == NULL)
-	{
-		fprintf(fd, "})");
-		return;
-	}
 	fprintf(fd,"%s: ", node->attrName);
-	generateDataValue(node->value); 
-	if (node->next != NULL)
+	switch (node->type)
 	{
-		fprintf(fd,",");
+	case PARAM_VALUE:
+		generateDataValue(node->value);
+		break;
+	case PARAM_VAR:
+		fprintf(fd, "%s", node->varName);
+	default:
+		break;
 	}
-	generateParamList(node->next);
+	if (node->next != NULL) {
+		fprintf(fd, ", ");
+		generateParamList(node->next);
+	}
 }
 
 void generateVarEquals(tVarEquals * node){
 	LogDebug("\tgenerateVarEquals()");	
-	fprintf(fd, "=");
 	switch (node->type)
 	{
 	case VAREQ_INSTANCE_ATT:
@@ -227,7 +260,9 @@ void generateIfStatement(tIfStatement * node) {
 	fprintf(fd,"){\n" );
 	generateCodeList(node->codeList);
 	fprintf(fd,"}\n" );
-	generateElseStatement(node->elseStatement);
+	if (node->elseStatement != NULL) {
+		generateElseStatement(node->elseStatement);
+	}
 }
 
 void generateElseStatement(tElseStatement * node) {
@@ -235,10 +270,11 @@ void generateElseStatement(tElseStatement * node) {
 	if (node == NULL) {
 		return;
 	}
+	fprintf(fd,"else " );
 	switch (node->type)
 	{
 		case ELSE_CODE_LIST:
-			fprintf(fd,"{\n" );
+			fprintf(fd, "{\n");
 			generateCodeList(node->codeList);
 			fprintf(fd,"}\n" );
 			break;
@@ -256,9 +292,9 @@ void generateLogicalExpression(tLogicalExpression * node) {
 	switch(node->type) {
 		case MULTIPLE_LOGEX:
 			generateLogicalExpression(node->left);
+			fprintf(fd, " %s ", node->logicalConnector);
 			generateLogicalExpression(node->right);
 			break;
-		
 		case VAR_NAME_LOGEX:
 			fprintf(fd, "%s", node->varName);
 			break;
@@ -290,11 +326,11 @@ void generateDataValue(tDataValue * node){
 	switch (node->type)
 	{
 		case BOOLEAN_VAL:
-			fprintf(fd,"%d", node->boolVal);
+			fprintf(fd,"%s", node->boolVal == true ? "true" : "false");
 			break;
 
 		case STRING_VAL:
-			fprintf(fd,"%s", node->stringVal);
+			fprintf(fd,"'%s'", node->stringVal);
 			break;
 
 		case INTEGER_VAL:
@@ -304,5 +340,4 @@ void generateDataValue(tDataValue * node){
 		default:
 			break;
 	}
-	LogDebug("\t LLEGO AL FINAL");
 }

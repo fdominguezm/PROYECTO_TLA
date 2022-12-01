@@ -133,6 +133,14 @@ typedef enum LogicalExpresionType{
 	CLASS_METHOD_LOGEX
 }LogExType;
 
+typedef enum LogicalConnector {
+	ANDA,
+	ORA,
+	EQEQA,
+	GTA,
+	LTA
+} LogicalConnector;
+
 typedef struct tLogicalExpression{
 	struct tLogicalExpression * right;
 	struct tLogicalExpression * left;
@@ -144,6 +152,8 @@ typedef struct tLogicalExpression{
 	tClassMethod * classMethod;
 	LogExType type;
 }tLogicalExpression;
+
+
 
 
 typedef struct tIfStatement{
@@ -208,10 +218,17 @@ typedef struct tVar{
 	tVarEquals varEq;
 }tVar;
 
+typedef enum ParamType {
+	PARAM_VALUE,
+	PARAM_VAR
+} ParamType;
+
 typedef struct tParamList{
 	char * attrName;
 	tDataValue * value;
+	char * varName;
 	struct tParamList * next;
+	ParamType type;
 } tParamList;
 
 typedef enum VarDeclarationType {

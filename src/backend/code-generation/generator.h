@@ -7,6 +7,8 @@
 
 
 void Generator(tProgram *  result);
+void generateSetup();
+void generateExit();
 void generateClassSection(tClassSection * node);
 void generateClassList(tClassList * node);
 void generateClassDeclaration(tClassDeclaration * node) ;
